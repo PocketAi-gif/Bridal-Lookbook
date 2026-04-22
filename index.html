@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bridal Lookbook — Hair Vision Builder</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F9F6F1;--cream-dark:#F0EBE1;--cream-border:#E2D9CC;--cream-border-strong:#C8BDB0;
+  --ink:#1C1917;--ink-mid:#6B6560;--ink-light:#A09A93;--white:#FFFFFF;
+}
+body{font-family:Georgia,'Times New Roman',serif;background:var(--cream);min-height:100vh}
+.app{max-width:500px;margin:0 auto;padding:1.5rem 1.25rem 4rem;background:var(--cream);position:relative}
+.hdr{text-align:center;padding-bottom:1.5rem;margin-bottom:1.75rem;border-bottom:1px solid var(--cream-border)}
+.hdr .wordmark{font-size:22px;font-weight:400;letter-spacing:.22em;color:var(--ink);text-transform:uppercase}
+.hdr .sub{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-light);margin-top:5px}
+.hdr .ornament{font-size:13px;color:var(--cream-border-strong);letter-spacing:.3em;margin:8px 0 0}
+.screen{display:none}.screen.on{display:block}
+.btn{width:100%;padding:13px;font-size:11px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-family:Georgia,serif;transition:all .18s}
+.btn-s{background:var(--ink);border:1px solid var(--ink);color:var(--cream)}
+.btn-s:hover{background:#2d2926}
+.btn-o{background:transparent;border:1px solid var(--cream-border-strong);color:var(--ink)}
+.btn-o:hover{background:var(--cream-dark)}
+.btn-sm{padding:8px 16px;font-size:10px;width:auto}
+.btn-ghost{background:transparent;border:none;color:var(--ink-light);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:10px;font-family:Georgia,serif;width:100%;text-align:center}
+.btn-ghost:hover{color:var(--ink)}
+.slabel{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-light);font-weight:400;margin-bottom:.6rem;font-family:Georgia,serif}
+.finput{width:100%;padding:10px 12px;font-size:13px;border:1px solid var(--cream-border);background:var(--white);color:var(--ink);font-family:Georgia,'Times New Roman',serif;outline:none;transition:border-color .18s;appearance:none;-webkit-appearance:none}
+.finput:focus{border-color:var(--cream-border-strong)}
+textarea.finput{resize:vertical;min-height:90px;line-height:1.6}
+select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23A09A93' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;cursor:pointer;font-family:Georgia,'Times New Roman',serif;font-size:13px}
+.field{margin-bottom:1.4rem}
+.divider{border:none;border-top:1px solid var(--cream-border);margin:1.4rem 0}
+.party-list{display:flex;flex-direction:column;gap:1px;margin-bottom:1rem;border:1px solid var(--cream-border);background:var(--cream-border);max-height:420px;overflow-y:auto}
+.pitem{display:flex;align-items:center;gap:14px;padding:.85rem 1.1rem;cursor:pointer;background:var(--cream);transition:background .15s;flex-shrink:0}
+.pitem:hover{background:var(--cream-dark)}
+.pav{width:40px;height:40px;border-radius:50%;border:1px solid var(--cream-border);overflow:hidden;background:var(--cream-dark);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-mid)}
+.pav img{width:100%;height:100%;object-fit:cover}
+.pinfo{flex:1;min-width:0}
+.pname{font-size:13px;color:var(--ink)}
+.prole{font-size:9px;color:var(--ink-light);letter-spacing:.12em;text-transform:uppercase;margin-top:2px}
+.pstatus{font-size:10px;color:var(--ink-light);margin-top:1px;font-style:italic}
+.parrow{font-size:14px;color:var(--cream-border-strong);flex-shrink:0}
+.party-count{font-size:10px;color:var(--ink-light);font-style:italic;text-align:right;margin-bottom:.75rem}
+.add-item{display:flex;align-items:center;justify-content:center;gap:8px;border:1px dashed var(--cream-border-strong);padding:.85rem 1rem;cursor:pointer;color:var(--ink-light);background:var(--cream);margin-bottom:1.4rem}
+.add-item:hover{background:var(--cream-dark)}
+.add-item span{font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.back-btn{display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;color:var(--ink-light);font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.25rem;font-family:Georgia,serif;padding:0}
+.back-btn:hover{color:var(--ink)}
+.face-zone{text-align:center;margin-bottom:1.4rem}
+.face-circle{width:118px;height:118px;border-radius:50%;margin:0 auto .9rem;border:1px solid var(--cream-border);overflow:hidden;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+.face-circle img{width:100%;height:100%;object-fit:cover}
+.fc-init{font-size:28px;color:var(--ink-mid)}
+.fc-overlay{position:absolute;bottom:0;left:0;right:0;background:rgba(28,25,23,.58);color:var(--cream);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:5px;text-align:center}
+.name-big{width:100%;font-size:18px;font-weight:400;border:none;border-bottom:1px solid var(--cream-border);background:transparent;color:var(--ink);padding:7px 0;text-align:center;font-family:Georgia,serif;letter-spacing:.06em;outline:none}
+.name-big:focus{border-bottom-color:var(--ink)}
+.role-display{font-size:9px;color:var(--ink-light);letter-spacing:.16em;text-transform:uppercase;margin-top:4px}
+.photo-menu{border:1px solid var(--cream-border);padding:1rem;background:var(--white);margin-top:.75rem;display:none}
+.photo-opts{display:flex;gap:8px;margin-top:.6rem}
+.popt{flex:1;border:1px solid var(--cream-border);padding:.8rem .5rem;text-align:center;cursor:pointer;background:var(--cream);color:var(--ink-mid)}
+.popt:hover{background:var(--cream-dark)}
+.popt-icon{font-size:18px;margin-bottom:4px;display:block}
+.popt-label{font-size:9px;letter-spacing:.1em;text-transform:uppercase;display:block;color:var(--ink-mid)}
+.tabs3{display:flex;border:1px solid var(--cream-border);overflow:hidden;margin-bottom:.75rem}
+.t3{flex:1;padding:9px 4px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;text-align:center;border:none;border-right:1px solid var(--cream-border);cursor:pointer;background:var(--cream-dark);color:var(--ink-light);font-family:Georgia,serif;transition:all .15s}
+.t3:last-child{border-right:none}
+.t3.on{background:var(--ink);color:var(--cream)}
+.search-row{display:flex;gap:6px;margin-bottom:.6rem}
+.search-row input{flex:1;padding:9px 11px;font-size:12px;border:1px solid var(--cream-border);background:var(--white);color:var(--ink);font-family:Georgia,serif;outline:none}
+.search-row input:focus{border-color:var(--cream-border-strong)}
+.sr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;min-height:80px}
+.sri{aspect-ratio:1;overflow:hidden;border:2px solid transparent;cursor:pointer;background:var(--cream-dark);position:relative;transition:border-color .15s}
+.sri img{width:100%;height:100%;object-fit:cover;display:block}
+.sri.picked{border:2px solid var(--ink)}
+.sri .sck{position:absolute;top:4px;right:4px;width:18px;height:18px;background:var(--ink);color:var(--cream);font-size:10px;display:none;align-items:center;justify-content:center}
+.sri.picked .sck{display:flex}
+.sinfo{font-size:11px;color:var(--ink-light);text-align:center;padding:1.1rem;letter-spacing:.04em;grid-column:1/-1;font-style:italic}
+.inspo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:.75rem}
+.ig{aspect-ratio:1;overflow:hidden;border:1px solid var(--cream-border);position:relative;background:var(--cream-dark)}
+.ig img{width:100%;height:100%;object-fit:cover;display:block}
+.ig .igx{position:absolute;top:3px;right:3px;background:var(--ink);color:var(--cream);border:none;width:17px;height:17px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.ig-add{aspect-ratio:1;border:1px dashed var(--cream-border-strong);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--ink-light);background:var(--cream)}
+.ig-add:hover{background:var(--cream-dark)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:7px 14px;font-size:11px;border:1px solid var(--cream-border-strong);cursor:pointer;background:var(--cream);color:var(--ink-mid);font-family:Georgia,serif;transition:all .18s;letter-spacing:.04em}
+.chip:hover{border-color:var(--ink);color:var(--ink)}
+.chip.on{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+.radio-chips{display:flex;flex-wrap:wrap;gap:7px}
+.rchip{padding:7px 14px;font-size:11px;border:1px solid var(--cream-border-strong);cursor:pointer;background:var(--cream);color:var(--ink-mid);font-family:Georgia,serif;transition:all .18s;letter-spacing:.04em}
+.rchip:hover{border-color:var(--ink);color:var(--ink)}
+.rchip.on{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+.url-preview-wrap{margin:.5rem 0;border:1px solid var(--cream-border);overflow:hidden;display:none}
+.url-preview-wrap img{width:100%;max-height:150px;object-fit:cover;display:block}
+.lb-person{background:var(--white);border:1px solid var(--cream-border);margin-bottom:10px}
+.lb-top{display:flex;align-items:center;gap:14px;padding:1rem 1.1rem;border-bottom:1px solid var(--cream-border)}
+.lb-face{width:54px;height:54px;border-radius:50%;border:1px solid var(--cream-border);overflow:hidden;flex-shrink:0;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--ink-mid)}
+.lb-face img{width:100%;height:100%;object-fit:cover}
+.lb-body{padding:1rem 1.1rem}
+.lb-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:.6rem}
+.lb-tag{font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--cream-border-strong);color:var(--ink-mid)}
+.lb-specs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:.6rem}
+.lb-spec{font-size:10px;color:var(--ink-mid);font-style:italic}
+.lb-spec strong{font-style:normal;font-weight:400;color:var(--ink);font-size:9px;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:1px}
+.lb-note{font-size:11px;color:var(--ink-mid);font-style:italic;line-height:1.6;margin-bottom:.75rem}
+.lb-inspos{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.lb-inspos .li{aspect-ratio:1;overflow:hidden;border:1px solid var(--cream-border);background:var(--cream-dark)}
+.lb-inspos .li img{width:100%;height:100%;object-fit:cover;display:block}
+.lb-inspos .li-ph{display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--ink-light);letter-spacing:.06em;text-transform:uppercase}
+.share-box{border:1px solid var(--cream-border);padding:1.1rem;margin-top:1.25rem;background:var(--white)}
+.share-url{width:100%;padding:8px 10px;font-size:11px;border:1px solid var(--cream-border);background:var(--cream);color:var(--ink-light);font-family:Georgia,serif;margin-bottom:8px}
+.btn-row{display:flex;gap:8px}.btn-row .btn{flex:1}
+.empty-state{text-align:center;padding:2.5rem 1rem;color:var(--ink-light);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-style:italic}
+.upload-zone{border:1px dashed var(--cream-border-strong);padding:1.25rem;text-align:center;background:var(--cream);cursor:pointer}
+.upload-zone:hover{background:var(--cream-dark)}
+.upload-zone p{font-size:12px;color:var(--ink-mid);font-style:italic}
+.upload-zone span{font-size:9px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:3px}
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(14px);background:var(--ink);color:var(--cream);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:8px 20px;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;z-index:999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.hint{font-size:10px;color:var(--ink-light);letter-spacing:.03em;line-height:1.6;margin-top:4px;font-style:italic}
+.spinner{display:inline-block;width:14px;height:14px;border:1.5px solid var(--cream-border);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+input[type=file]{display:none}
+@media print{.share-box,.back-btn,.btn-ghost,.btn-o,.btn-s{display:none}}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="hdr">
+    <div class="wordmark">Bridal Lookbook</div>
+    <div class="sub">Hair Vision Builder</div>
+    <div class="ornament">— ✦ —</div>
+  </div>
+
+  <!-- HOME -->
+  <div id="s-home" class="screen on">
+    <div class="field">
+      <div class="slabel">Bridal Party</div>
+      <p class="party-count" id="partyCount"></p>
+      <div class="party-list" id="partyList"></div>
+      <div class="add-item" id="addBtn" onclick="addMember()">
+        <span style="font-size:16px;margin-right:2px">+</span>
+        <span>Add Party Member</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:.5rem">
+      <button class="btn btn-o" onclick="goScreen('lookbook')">Preview Lookbook</button>
+      <button class="btn btn-s" onclick="goScreen('lookbook')">Export</button>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div id="s-profile" class="screen">
+    <button class="back-btn" onclick="goScreen('home')">&#8592; Back To Party</button>
+
+    <div class="face-zone">
+      <div class="face-circle" id="faceCircle" onclick="togglePhotoMenu()">
+        <div class="fc-init" id="fcInit">?</div>
+        <div class="fc-overlay">Add Photo</div>
+      </div>
+      <input class="name-big" id="nameIn" type="text" placeholder="Your Name" oninput="saveName(this.value)" />
+      <p class="role-display" id="roleDisplay"></p>
+      <div class="photo-menu" id="photoMenu">
+        <div class="slabel">Upload A Photo Of Yourself</div>
+        <div class="photo-opts">
+          <div class="popt" onclick="doLibrary()">
+            <span class="popt-icon">&#128247;</span>
+            <span class="popt-label">Photo Library</span>
+          </div>
+          <div class="popt" onclick="doCamera()">
+            <span class="popt-icon">&#127909;</span>
+            <span class="popt-label">Take Photo</span>
+          </div>
+        </div>
+        <p class="hint" style="text-align:center;margin-top:.5rem">On Mobile, "Take Photo" Opens Your Camera Directly</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field">
+      <div class="slabel">Role In The Party</div>
+      <select class="finput" id="roleSelect" onchange="saveRole(this.value)">
+        <option value="">— Select A Role —</option>
+        <option value="Bridal Guest">Bridal Guest</option>
+        <option value="Bride">Bride</option>
+        <option value="Bridesmaid">Bridesmaid</option>
+        <option value="Flower Girl">Flower Girl</option>
+        <option value="Groom">Groom</option>
+        <option value="Maid Of Honor">Maid Of Honor</option>
+        <option value="Matron Of Honor">Matron Of Honor</option>
+        <option value="Mother Of The Bride (M.O.B)">Mother Of The Bride (M.O.B)</option>
+        <option value="Mother Of The Groom (M.O.G)">Mother Of The Groom (M.O.G)</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field">
+      <div class="slabel">Hair Inspo Photos</div>
+      <p class="hint" style="margin-bottom:.65rem">Search by keyword, paste a URL from Pinterest or Google, or upload from your device</p>
+      <div class="tabs3">
+        <button class="t3 on" id="it-search" onclick="setInspoTab('search')">Search</button>
+        <button class="t3" id="it-url" onclick="setInspoTab('url')">Paste URL</button>
+        <button class="t3" id="it-upload" onclick="setInspoTab('upload')">Upload</button>
+      </div>
+      <div id="ip-search">
+        <div class="search-row">
+          <input id="searchIn" type="text" placeholder="e.g. Romantic Updo, Boho Waves, Sleek Chignon..." onkeydown="if(event.key==='Enter')doSearch()" />
+          <button class="btn btn-s btn-sm" onclick="doSearch()">Search</button>
+        </div>
+        <div class="sr-grid" id="searchGrid"><div class="sinfo">Type A Style And Tap Search</div></div>
+      </div>
+      <div id="ip-url" style="display:none">
+        <div class="search-row">
+          <input id="urlIn" type="text" placeholder="Paste Direct Image URL Here..." oninput="onUrlInput(this.value)" />
+          <button class="btn btn-s btn-sm" onclick="addUrl()">Add</button>
+        </div>
+        <div class="url-preview-wrap" id="urlPreviewWrap"><img id="urlPreviewImg" alt="preview" onerror="document.getElementById('urlPreviewWrap').style.display='none'" /></div>
+        <p class="hint">Long-Press Any Image On Pinterest Or Google → "Copy Image Address" → Paste Above</p>
+      </div>
+      <div id="ip-upload" style="display:none">
+        <div class="upload-zone" onclick="document.getElementById('inspoFile').click()">
+          <p>Upload From Your Device</p>
+          <span>Tap To Browse</span>
+        </div>
+      </div>
+      <div class="inspo-grid" id="inspoGrid"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field">
+      <div class="slabel">Hair Length</div>
+      <div class="radio-chips" id="lengthChips">
+        <button class="rchip" onclick="pickRadio('length',this,'Above Shoulders')">Above Shoulders</button>
+        <button class="rchip" onclick="pickRadio('length',this,'Shoulder Length')">Shoulder Length</button>
+        <button class="rchip" onclick="pickRadio('length',this,'Mid Back')">Mid Back</button>
+        <button class="rchip" onclick="pickRadio('length',this,'Waist Length')">Waist Length</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="slabel">Hair Thickness</div>
+      <div class="radio-chips" id="thicknessChips">
+        <button class="rchip" onclick="pickRadio('thickness',this,'Fine')">Fine</button>
+        <button class="rchip" onclick="pickRadio('thickness',this,'Medium')">Medium</button>
+        <button class="rchip" onclick="pickRadio('thickness',this,'Thick')">Thick</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="slabel">Hair Texture</div>
+      <div class="radio-chips" id="textureChips">
+        <button class="rchip" onclick="pickRadio('texture',this,'Straight')">Straight</button>
+        <button class="rchip" onclick="pickRadio('texture',this,'Wavy')">Wavy</button>
+        <button class="rchip" onclick="pickRadio('texture',this,'Curly')">Curly</button>
+        <button class="rchip" onclick="pickRadio('texture',this,'Coily')">Coily</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="slabel">Extensions Needed?</div>
+      <div class="radio-chips" id="extensionsChips">
+        <button class="rchip" onclick="pickRadio('extensions',this,'Yes — I Have My Own')">Yes — I Have My Own</button>
+        <button class="rchip" onclick="pickRadio('extensions',this,'Yes — Recommendations Needed')">Yes — Recommendations Needed</button>
+        <button class="rchip" onclick="pickRadio('extensions',this,'No')">No</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field">
+      <div class="slabel">Hair Accessories &amp; Add-Ons</div>
+      <div class="chips" id="accChips">
+        <button class="chip" onclick="toggleChip(this,'accessories')">Barrette</button>
+        <button class="chip" onclick="toggleChip(this,'accessories')">Extensions</button>
+        <button class="chip" onclick="toggleChip(this,'accessories')">Floral Pins</button>
+        <button class="chip" onclick="toggleChip(this,'accessories')">Headband</button>
+        <button class="chip" onclick="toggleChip(this,'accessories')">Jewel Comb</button>
+        <button class="chip" onclick="toggleChip(this,'accessories')">Pearl Pins</button>
+        <button class="chip" onclick="toggleChip(this,'accessories')">Ribbon</button>
+        <button class="chip" onclick="toggleChip(this,'accessories')">Tiara</button>
+        <button class="chip" onclick="toggleChip(this,'accessories')">Veil Clips</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="slabel">Hair Sensitivities &amp; Concerns</div>
+      <div class="chips" id="concernChips">
+        <button class="chip" onclick="toggleChip(this,'concerns')">Color Treated</button>
+        <button class="chip" onclick="toggleChip(this,'concerns')">Curls Don't Hold</button>
+        <button class="chip" onclick="toggleChip(this,'concerns')">Dry Ends</button>
+        <button class="chip" onclick="toggleChip(this,'concerns')">Frizz Prone</button>
+        <button class="chip" onclick="toggleChip(this,'concerns')">Heat Damaged</button>
+        <button class="chip" onclick="toggleChip(this,'concerns')">Oily Scalp</button>
+        <button class="chip" onclick="toggleChip(this,'concerns')">Product Sensitive</button>
+        <button class="chip" onclick="toggleChip(this,'concerns')">Scalp Sensitivity</button>
+        <button class="chip" onclick="toggleChip(this,'concerns')">Thinning Hair</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field">
+      <div class="slabel">Notes &amp; Concerns For Stylist</div>
+      <textarea class="finput" id="notesIn" placeholder="Anything Else To Share — Allergies, Timing, Specific Preferences..." oninput="saveNotes(this.value)"></textarea>
+    </div>
+
+    <button class="btn btn-s" onclick="saveAndBack()" style="margin-bottom:8px">Save Profile</button>
+    <button class="btn-ghost" onclick="goScreen('home')">&#8592; Back Without Saving</button>
+  </div>
+
+  <!-- LOOKBOOK -->
+  <div id="s-lookbook" class="screen">
+    <button class="back-btn" onclick="goScreen('home')">&#8592; Back To Party</button>
+    <div style="text-align:center;margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:1px solid var(--cream-border)">
+      <p style="font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink)">Bridal Party Lookbook</p>
+      <input class="finput" id="wdIn" type="text" placeholder="Wedding Date..." style="font-size:11px;padding:6px 10px;margin-top:.6rem;text-align:center;letter-spacing:.06em" />
+    </div>
+    <div id="lbContent"></div>
+    <div class="share-box">
+      <div class="slabel" style="margin-bottom:.6rem">Share With Hairstylist</div>
+      <input class="share-url" id="shareUrl" readonly value="" />
+      <div class="btn-row">
+        <button class="btn btn-o" onclick="copyLink()">Copy Link</button>
+        <button class="btn btn-s" onclick="dlPdf()">Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<input type="file" id="faceLibFile" accept="image/*" onchange="handleFaceFile(event)" />
+<input type="file" id="faceCamFile" accept="image/*" capture="user" onchange="handleFaceFile(event)" />
+<input type="file" id="inspoFile" accept="image/*" multiple onchange="handleInspoFile(event)" />
+
+<script>
+const MAX_MEMBERS=12;
+function newMember(){return{role:'',name:'',faceImg:null,inspoImgs:[],accessories:[],concerns:[],length:'',thickness:'',texture:'',extensions:'',notes:''}}
+let party=[newMember()];
+let cur=0;
+
+const HAIR_IMAGES={
+  updo:['https://images.unsplash.com/photo-1519741497674-611481863552?w=400&fit=crop','https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&fit=crop','https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&fit=crop','https://images.unsplash.com/photo-1502872364588-894d7d6ddfab?w=400&fit=crop','https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=400&fit=crop','https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&fit=crop'],
+  waves:['https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&fit=crop','https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&fit=crop','https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&fit=crop','https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?w=400&fit=crop','https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&fit=crop','https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&fit=crop'],
+  boho:['https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=400&fit=crop','https://images.unsplash.com/photo-1464863979621-258859e62245?w=400&fit=crop','https://images.unsplash.com/photo-1522308822788-df76e08ab9ca?w=400&fit=crop','https://images.unsplash.com/photo-1552058544-f2b08422138a?w=400&fit=crop','https://images.unsplash.com/photo-1519011985143-d30f4f4f9ff5?w=400&fit=crop','https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&fit=crop'],
+  sleek:['https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&fit=crop','https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&fit=crop','https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=400&fit=crop','https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&fit=crop','https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&fit=crop','https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&fit=crop'],
+  romantic:['https://images.unsplash.com/photo-1519741497674-611481863552?w=400&fit=crop','https://images.unsplash.com/photo-1502872364588-894d7d6ddfab?w=400&fit=crop','https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&fit=crop','https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&fit=crop','https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&fit=crop','https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&fit=crop'],
+  hollywood:['https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&fit=crop','https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&fit=crop','https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&fit=crop','https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?w=400&fit=crop','https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=400&fit=crop','https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&fit=crop'],
+  default:['https://images.unsplash.com/photo-1519741497674-611481863552?w=400&fit=crop','https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&fit=crop','https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&fit=crop','https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=400&fit=crop','https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&fit=crop','https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=400&fit=crop']
+};
+
+function getImgs(q){
+  q=(q||'').toLowerCase();
+  for(const k of Object.keys(HAIR_IMAGES)){if(q.includes(k))return HAIR_IMAGES[k]}
+  return Object.values(HAIR_IMAGES).flat().sort(()=>Math.random()-.5).slice(0,6);
+}
+function initials(p){const n=p.name||(p.role||'?');return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
+
+function renderHome(){
+  const list=document.getElementById('partyList');list.innerHTML='';
+  party.forEach((p,i)=>{
+    const done=p.name||p.faceImg||p.inspoImgs.length||p.length;
+    const d=document.createElement('div');d.className='pitem';d.onclick=()=>openProfile(i);
+    d.innerHTML=`<div class="pav">${p.faceImg?`<img src="${p.faceImg}"/>`:`<span>${initials(p)}</span>`}</div>
+<div class="pinfo"><div class="pname">${p.name||'Unnamed'}</div><div class="prole">${p.role||'No Role Selected'}</div>
+<div class="pstatus">${done?'Profile Started — Tap To Edit':'Tap To Fill Out Profile'}</div></div>
+<div class="parrow">›</div>`;
+    list.appendChild(d);
+  });
+  document.getElementById('partyCount').textContent=`${party.length} Of ${MAX_MEMBERS} Members`;
+  document.getElementById('addBtn').style.display=party.length<MAX_MEMBERS?'flex':'none';
+}
+
+function addMember(){
+  if(party.length>=MAX_MEMBERS){showToast('Maximum 12 Members Reached');return}
+  party.push(newMember());renderHome();openProfile(party.length-1);
+}
+
+function openProfile(i){cur=i;loadProfile(i);goScreen('profile')}
+
+function loadProfile(i){
+  const p=party[i];
+  document.getElementById('nameIn').value=p.name;
+  document.getElementById('roleDisplay').textContent=p.role||'';
+  document.getElementById('roleSelect').value=p.role||'';
+  updateFaceCircle(p);
+  document.getElementById('photoMenu').style.display='none';
+  document.getElementById('notesIn').value=p.notes;
+  document.querySelectorAll('#lengthChips .rchip').forEach(c=>c.classList.toggle('on',c.textContent.trim()===p.length));
+  document.querySelectorAll('#thicknessChips .rchip').forEach(c=>c.classList.toggle('on',c.textContent.trim()===p.thickness));
+  document.querySelectorAll('#textureChips .rchip').forEach(c=>c.classList.toggle('on',c.textContent.trim()===p.texture));
+  document.querySelectorAll('#extensionsChips .rchip').forEach(c=>c.classList.toggle('on',c.textContent.trim()===p.extensions));
+  document.querySelectorAll('#accChips .chip').forEach(c=>c.classList.toggle('on',p.accessories.includes(c.textContent.trim())));
+  document.querySelectorAll('#concernChips .chip').forEach(c=>c.classList.toggle('on',p.concerns.includes(c.textContent.trim())));
+  renderInspoGrid(i);
+  setInspoTab('search');
+  document.getElementById('searchGrid').innerHTML='<div class="sinfo">Type A Style And Tap Search</div>';
+  document.getElementById('searchIn').value='';
+  document.getElementById('urlIn').value='';
+  document.getElementById('urlPreviewWrap').style.display='none';
+}
+
+function updateFaceCircle(p){
+  const fc=document.getElementById('faceCircle');fc.innerHTML='';
+  if(p.faceImg){fc.innerHTML=`<img src="${p.faceImg}" style="width:100%;height:100%;object-fit:cover"/><div class="fc-overlay">Change Photo</div>`}
+  else{fc.innerHTML=`<div class="fc-init">${initials(p)}</div><div class="fc-overlay">Add Photo</div>`}
+}
+
+function saveRole(v){party[cur].role=v;document.getElementById('roleDisplay').textContent=v}
+
+function pickRadio(field,el,val){
+  document.querySelectorAll('#'+field+'Chips .rchip').forEach(c=>c.classList.remove('on'));
+  if(party[cur][field]===val){party[cur][field]=''} else{el.classList.add('on');party[cur][field]=val}
+}
+
+function toggleChip(el,field){
+  el.classList.toggle('on');
+  const v=el.textContent.trim();const arr=party[cur][field];
+  if(el.classList.contains('on')){if(!arr.includes(v))arr.push(v)}
+  else{const i=arr.indexOf(v);if(i>-1)arr.splice(i,1)}
+}
+
+function togglePhotoMenu(){const m=document.getElementById('photoMenu');m.style.display=m.style.display==='none'?'block':'none'}
+function doLibrary(){document.getElementById('faceLibFile').click();document.getElementById('photoMenu').style.display='none'}
+function doCamera(){document.getElementById('faceCamFile').click();document.getElementById('photoMenu').style.display='none'}
+
+function handleFaceFile(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{party[cur].faceImg=ev.target.result;updateFaceCircle(party[cur]);renderHome()};
+  r.readAsDataURL(f);e.target.value='';
+}
+
+function setInspoTab(t){
+  ['search','url','upload'].forEach(k=>{
+    document.getElementById('it-'+k).classList.toggle('on',k===t);
+    document.getElementById('ip-'+k).style.display=k===t?'block':'none';
+  });
+}
+
+function doSearch(){
+  const q=document.getElementById('searchIn').value.trim();
+  const g=document.getElementById('searchGrid');
+  if(!q){g.innerHTML='<div class="sinfo">Type A Keyword First</div>';return}
+  g.innerHTML=`<div class="sinfo"><span class="spinner"></span>Finding Styles For "${q}"...</div>`;
+  setTimeout(()=>{
+    const imgs=getImgs(q);g.innerHTML='';
+    imgs.forEach(src=>{
+      const picked=party[cur].inspoImgs.includes(src);
+      const d=document.createElement('div');d.className='sri'+(picked?' picked':'');
+      const img=document.createElement('img');img.src=src;img.alt='hair style';img.onerror=()=>d.style.display='none';
+      const ck=document.createElement('div');ck.className='sck';ck.textContent='✓';
+      d.appendChild(img);d.appendChild(ck);d.onclick=()=>toggleSri(d,src);g.appendChild(d);
+    });
+  },400);
+}
+
+function toggleSri(el,src){
+  const p=party[cur];
+  if(el.classList.contains('picked')){p.inspoImgs=p.inspoImgs.filter(s=>s!==src);el.classList.remove('picked')}
+  else{if(p.inspoImgs.length>=8){showToast('Max 8 Photos');return}p.inspoImgs.push(src);el.classList.add('picked')}
+  renderInspoGrid(cur);
+}
+
+function onUrlInput(v){
+  const wrap=document.getElementById('urlPreviewWrap');const img=document.getElementById('urlPreviewImg');
+  if(v.trim().startsWith('http')){img.src=v.trim();img.onload=()=>{wrap.style.display='block'};img.onerror=()=>{wrap.style.display='none'}}
+  else{wrap.style.display='none'}
+}
+
+function addUrl(){
+  const u=document.getElementById('urlIn').value.trim();
+  if(!u||!u.startsWith('http')){showToast('Please Paste A Valid Image URL');return}
+  if(party[cur].inspoImgs.length>=8){showToast('Max 8 Photos');return}
+  party[cur].inspoImgs.push(u);
+  document.getElementById('urlIn').value='';document.getElementById('urlPreviewWrap').style.display='none';
+  renderInspoGrid(cur);showToast('Photo Added');
+}
+
+function handleInspoFile(e){
+  const files=Array.from(e.target.files);const p=party[cur];const slots=8-p.inspoImgs.length;
+  files.slice(0,slots).forEach(f=>{const r=new FileReader();r.onload=ev=>{p.inspoImgs.push(ev.target.result);renderInspoGrid(cur)};r.readAsDataURL(f)});
+  e.target.value='';
+}
+
+function renderInspoGrid(i){
+  const p=party[i];const g=document.getElementById('inspoGrid');g.innerHTML='';
+  p.inspoImgs.forEach((s,j)=>{
+    const d=document.createElement('div');d.className='ig';
+    const img=document.createElement('img');img.src=s;img.alt='inspo';img.loading='lazy';img.onerror=()=>{img.style.opacity='.2'};
+    const btn=document.createElement('button');btn.className='igx';btn.textContent='×';
+    btn.onclick=e=>{e.stopPropagation();rmInspo(i,j)};
+    d.appendChild(img);d.appendChild(btn);g.appendChild(d);
+  });
+  if(p.inspoImgs.length<8){
+    const a=document.createElement('div');a.className='ig-add';a.textContent='+';
+    a.onclick=()=>document.getElementById('inspoFile').click();g.appendChild(a);
+  }
+}
+
+function rmInspo(pi,ji){
+  const removed=party[pi].inspoImgs[ji];party[pi].inspoImgs.splice(ji,1);renderInspoGrid(pi);
+  document.querySelectorAll('.sri').forEach(el=>{const img=el.querySelector('img');if(img&&img.src===removed)el.classList.remove('picked')});
+}
+
+function saveName(v){
+  party[cur].name=v;
+  if(!party[cur].faceImg){const fc=document.getElementById('faceCircle');const init=fc.querySelector('.fc-init');if(init)init.textContent=initials(party[cur])}
+}
+function saveNotes(v){party[cur].notes=v}
+function saveAndBack(){renderHome();goScreen('home');showToast('Profile Saved')}
+
+function renderLookbook(){
+  const c=document.getElementById('lbContent');c.innerHTML='';
+  const any=party.some(p=>p.name||p.faceImg||p.inspoImgs.length||p.accessories.length||p.notes||p.length);
+  if(!any){c.innerHTML='<div class="empty-state">No Profiles Added Yet</div>';return}
+  party.forEach(p=>{
+    const card=document.createElement('div');card.className='lb-person';
+    let inspoHtml='';
+    for(let i=0;i<4;i++){inspoHtml+=p.inspoImgs[i]?`<div class="li"><img src="${p.inspoImgs[i]}" loading="lazy"/></div>`:`<div class="li li-ph">Inspo ${i+1}</div>`}
+    const specs=[];
+    if(p.length)specs.push({label:'Length',val:p.length});
+    if(p.thickness)specs.push({label:'Thickness',val:p.thickness});
+    if(p.texture)specs.push({label:'Texture',val:p.texture});
+    if(p.extensions)specs.push({label:'Extensions',val:p.extensions});
+    const specsHtml=specs.length?`<div class="lb-specs">${specs.map(s=>`<div class="lb-spec"><strong>${s.label}</strong>${s.val}</div>`).join('')}</div>`:'';
+    card.innerHTML=`<div class="lb-top">
+${p.faceImg?`<div class="lb-face"><img src="${p.faceImg}"/></div>`:`<div class="lb-face">${initials(p)}</div>`}
+<div><div style="font-size:14px;color:#1C1917;font-family:Georgia,serif;letter-spacing:.04em">${p.name||'(Unnamed)'}</div>
+<div style="font-size:9px;color:#A09A93;letter-spacing:.14em;text-transform:uppercase;margin-top:3px;font-family:Georgia,serif">${p.role||'No Role'}</div></div>
+</div>
+<div class="lb-body">
+${specsHtml}
+${p.accessories.length?`<div class="lb-tags">${p.accessories.map(t=>`<span class="lb-tag">${t}</span>`).join('')}</div>`:''}
+${p.concerns.length?`<div class="lb-tags" style="margin-top:4px">${p.concerns.map(t=>`<span class="lb-tag" style="border-style:dashed">${t}</span>`).join('')}</div>`:''}
+${p.notes?`<div class="lb-note">"${p.notes}"</div>`:''}
+<div class="lb-inspos">${inspoHtml}</div>
+</div>`;
+    c.appendChild(card);
+  });
+}
+
+function goScreen(s){
+  document.querySelectorAll('.screen').forEach(el=>el.classList.remove('on'));
+  document.getElementById('s-'+s).classList.add('on');
+  if(s==='lookbook'){renderLookbook();document.getElementById('shareUrl').value=window.location.href}
+  window.scrollTo(0,0);
+}
+function copyLink(){navigator.clipboard.writeText(window.location.href).catch(()=>{});showToast('Link Copied')}
+function dlPdf(){showToast('Opening Print Dialog — Save As PDF');setTimeout(()=>window.print(),400)}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
+
+renderHome();
+</script>
+</body>
+</html>
