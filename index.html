@@ -121,20 +121,28 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
 .spinner{display:inline-block;width:14px;height:14px;border:1.5px solid var(--cream-border);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
 input[type=file]{display:none}
-@media print{.share-box,.back-btn,.btn-ghost,.btn-o,.btn-s{display:none}}
+.save-indicator{font-size:9px;color:var(--ink-light);letter-spacing:.1em;text-transform:uppercase;text-align:right;padding:.3rem 0;font-style:italic;min-height:1.2rem}
+.save-indicator.saved{color:#3B6D11}
+.share-panel{background:var(--cream-dark);border:1px solid var(--cream-border);padding:1rem;margin-top:1rem}
+.member-link-list{display:flex;flex-direction:column;gap:6px;margin-top:.75rem}
+.member-link-item{display:flex;align-items:center;gap:8px;padding:.6rem .75rem;background:var(--white);border:1px solid var(--cream-border)}
+.mli-name{font-size:12px;color:var(--ink)}
+.mli-role{font-size:9px;color:var(--ink-light);letter-spacing:.08em;text-transform:uppercase}
+.mli-btn{padding:5px 10px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--cream-border-strong);background:transparent;color:var(--ink);cursor:pointer;font-family:Georgia,serif;white-space:nowrap;flex-shrink:0}
+.mli-btn:hover{background:var(--cream-dark)}
+.profile-banner{background:var(--cream-dark);border:1px solid var(--cream-border);padding:.75rem 1rem;margin-bottom:1rem;font-size:11px;color:var(--ink-mid);font-style:italic;text-align:center;display:none}
+.share-link-row{display:flex;gap:6px;align-items:center}
+.share-link-box{flex:1;padding:8px 10px;font-size:10px;border:1px solid var(--cream-border);background:var(--white);color:var(--ink-mid);font-family:Georgia,serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media print{.share-box,.share-panel,.back-btn,.btn-ghost,.add-item,#addBtn,.save-indicator,.profile-banner{display:none!important}}
 </style>
 </head>
 <body>
-
 <div class="app">
-
   <div class="hdr">
     <div class="wordmark">Bridal Lookbook</div>
     <div class="sub">Hair Vision Builder</div>
     <div class="ornament">— ✦ —</div>
   </div>
-
-  <!-- HOME -->
   <div id="s-home" class="screen on">
     <div class="field">
       <div class="slabel">Bridal Party</div>
@@ -145,22 +153,28 @@ input[type=file]{display:none}
         <span>Add Party Member</span>
       </div>
     </div>
-    <div style="display:flex;gap:8px;margin-top:.5rem">
+    <div class="share-panel">
+      <div class="slabel">Share Individual Profile Links</div>
+      <p class="hint" style="margin-bottom:.75rem">Each person gets their own link — tap Copy Link next to their name, then text or email it to them. They open it on their phone, fill it out, and it saves automatically.</p>
+      <div class="member-link-list" id="memberLinkList"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:1.4rem">
       <button class="btn btn-o" onclick="goScreen('lookbook')">Preview Lookbook</button>
       <button class="btn btn-s" onclick="goScreen('lookbook')">Export</button>
     </div>
+    <div style="margin-top:.75rem;text-align:center">
+      <button class="btn-ghost" onclick="if(confirm('Clear all data and start fresh?'))clearAll()">Clear All &amp; Start Over</button>
+    </div>
   </div>
-
-  <!-- PROFILE -->
   <div id="s-profile" class="screen">
-    <button class="back-btn" onclick="goScreen('home')">&#8592; Back To Party</button>
-
+    <button class="back-btn" id="backBtn" onclick="goScreen('home')">&#8592; Back To Party</button>
+    <div class="profile-banner" id="profileBanner">Filling Out Your Personal Profile — Changes Save Automatically</div>
     <div class="face-zone">
       <div class="face-circle" id="faceCircle" onclick="togglePhotoMenu()">
         <div class="fc-init" id="fcInit">?</div>
         <div class="fc-overlay">Add Photo</div>
       </div>
-      <input class="name-big" id="nameIn" type="text" placeholder="Your Name" oninput="saveName(this.value)" />
+      <input class="name-big" id="nameIn" type="text" placeholder="Your Name" oninput="autoSave('name',this.value)" />
       <p class="role-display" id="roleDisplay"></p>
       <div class="photo-menu" id="photoMenu">
         <div class="slabel">Upload A Photo Of Yourself</div>
@@ -177,12 +191,11 @@ input[type=file]{display:none}
         <p class="hint" style="text-align:center;margin-top:.5rem">On Mobile, "Take Photo" Opens Your Camera Directly</p>
       </div>
     </div>
-
+    <div class="save-indicator" id="saveIndicator"></div>
     <div class="divider"></div>
-
     <div class="field">
       <div class="slabel">Role In The Party</div>
-      <select class="finput" id="roleSelect" onchange="saveRole(this.value)">
+      <select class="finput" id="roleSelect" onchange="autoSave('role',this.value)">
         <option value="">— Select A Role —</option>
         <option value="Bridal Guest">Bridal Guest</option>
         <option value="Bride">Bride</option>
@@ -196,9 +209,7 @@ input[type=file]{display:none}
         <option value="Other">Other</option>
       </select>
     </div>
-
     <div class="divider"></div>
-
     <div class="field">
       <div class="slabel">Hair Inspo Photos</div>
       <p class="hint" style="margin-bottom:.65rem">Search by keyword, paste a URL from Pinterest or Google, or upload from your device</p>
@@ -230,9 +241,7 @@ input[type=file]{display:none}
       </div>
       <div class="inspo-grid" id="inspoGrid"></div>
     </div>
-
     <div class="divider"></div>
-
     <div class="field">
       <div class="slabel">Hair Length</div>
       <div class="radio-chips" id="lengthChips">
@@ -242,7 +251,6 @@ input[type=file]{display:none}
         <button class="rchip" onclick="pickRadio('length',this,'Waist Length')">Waist Length</button>
       </div>
     </div>
-
     <div class="field">
       <div class="slabel">Hair Thickness</div>
       <div class="radio-chips" id="thicknessChips">
@@ -251,7 +259,6 @@ input[type=file]{display:none}
         <button class="rchip" onclick="pickRadio('thickness',this,'Thick')">Thick</button>
       </div>
     </div>
-
     <div class="field">
       <div class="slabel">Hair Texture</div>
       <div class="radio-chips" id="textureChips">
@@ -261,7 +268,6 @@ input[type=file]{display:none}
         <button class="rchip" onclick="pickRadio('texture',this,'Coily')">Coily</button>
       </div>
     </div>
-
     <div class="field">
       <div class="slabel">Extensions Needed?</div>
       <div class="radio-chips" id="extensionsChips">
@@ -270,9 +276,7 @@ input[type=file]{display:none}
         <button class="rchip" onclick="pickRadio('extensions',this,'No')">No</button>
       </div>
     </div>
-
     <div class="divider"></div>
-
     <div class="field">
       <div class="slabel">Hair Accessories &amp; Add-Ons</div>
       <div class="chips" id="accChips">
@@ -287,7 +291,6 @@ input[type=file]{display:none}
         <button class="chip" onclick="toggleChip(this,'accessories')">Veil Clips</button>
       </div>
     </div>
-
     <div class="field">
       <div class="slabel">Hair Sensitivities &amp; Concerns</div>
       <div class="chips" id="concernChips">
@@ -302,71 +305,89 @@ input[type=file]{display:none}
         <button class="chip" onclick="toggleChip(this,'concerns')">Thinning Hair</button>
       </div>
     </div>
-
     <div class="divider"></div>
-
     <div class="field">
       <div class="slabel">Notes &amp; Concerns For Stylist</div>
-      <textarea class="finput" id="notesIn" placeholder="Anything Else To Share — Allergies, Timing, Specific Preferences..." oninput="saveNotes(this.value)"></textarea>
+      <textarea class="finput" id="notesIn" placeholder="Anything Else To Share — Allergies, Timing, Specific Preferences..." oninput="autoSave('notes',this.value)"></textarea>
     </div>
-
     <button class="btn btn-s" onclick="saveAndBack()" style="margin-bottom:8px">Save Profile</button>
-    <button class="btn-ghost" onclick="goScreen('home')">&#8592; Back Without Saving</button>
+    <button class="btn-ghost" id="backBtnBottom" onclick="goScreen('home')">&#8592; Back Without Saving</button>
   </div>
-
-  <!-- LOOKBOOK -->
   <div id="s-lookbook" class="screen">
     <button class="back-btn" onclick="goScreen('home')">&#8592; Back To Party</button>
     <div style="text-align:center;margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:1px solid var(--cream-border)">
       <p style="font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink)">Bridal Party Lookbook</p>
-      <input class="finput" id="wdIn" type="text" placeholder="Wedding Date..." style="font-size:11px;padding:6px 10px;margin-top:.6rem;text-align:center;letter-spacing:.06em" />
+      <input class="finput" id="wdIn" type="text" placeholder="Wedding Date..." style="font-size:11px;padding:6px 10px;margin-top:.6rem;text-align:center;letter-spacing:.06em" oninput="localStorage.setItem('lb_weddingdate',this.value)" />
     </div>
     <div id="lbContent"></div>
     <div class="share-box">
-      <div class="slabel" style="margin-bottom:.6rem">Share With Hairstylist</div>
-      <input class="share-url" id="shareUrl" readonly value="" />
-      <div class="btn-row">
-        <button class="btn btn-o" onclick="copyLink()">Copy Link</button>
-        <button class="btn btn-s" onclick="dlPdf()">Download PDF</button>
+      <div class="slabel" style="margin-bottom:.6rem">Share Full Lookbook With Stylist</div>
+      <div class="share-link-row">
+        <input class="share-link-box" id="shareUrl" readonly value="" />
+        <button class="btn btn-s btn-sm" onclick="copyLink()">Copy</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:.75rem">
+        <button class="btn btn-o" onclick="dlPdf()">Download PDF</button>
       </div>
     </div>
   </div>
-
   <div class="toast" id="toast"></div>
 </div>
-
 <input type="file" id="faceLibFile" accept="image/*" onchange="handleFaceFile(event)" />
 <input type="file" id="faceCamFile" accept="image/*" capture="user" onchange="handleFaceFile(event)" />
 <input type="file" id="inspoFile" accept="image/*" multiple onchange="handleInspoFile(event)" />
-
 <script>
 const MAX_MEMBERS=12;
-function newMember(){return{role:'',name:'',faceImg:null,inspoImgs:[],accessories:[],concerns:[],length:'',thickness:'',texture:'',extensions:'',notes:''}}
-let party=[newMember()];
-let cur=0;
-
-const HAIR_IMAGES={
-  updo:['https://images.unsplash.com/photo-1519741497674-611481863552?w=400&fit=crop','https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&fit=crop','https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&fit=crop','https://images.unsplash.com/photo-1502872364588-894d7d6ddfab?w=400&fit=crop','https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=400&fit=crop','https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&fit=crop'],
-  waves:['https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&fit=crop','https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&fit=crop','https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&fit=crop','https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?w=400&fit=crop','https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&fit=crop','https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&fit=crop'],
-  boho:['https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=400&fit=crop','https://images.unsplash.com/photo-1464863979621-258859e62245?w=400&fit=crop','https://images.unsplash.com/photo-1522308822788-df76e08ab9ca?w=400&fit=crop','https://images.unsplash.com/photo-1552058544-f2b08422138a?w=400&fit=crop','https://images.unsplash.com/photo-1519011985143-d30f4f4f9ff5?w=400&fit=crop','https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&fit=crop'],
-  sleek:['https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&fit=crop','https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&fit=crop','https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=400&fit=crop','https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&fit=crop','https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&fit=crop','https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&fit=crop'],
-  romantic:['https://images.unsplash.com/photo-1519741497674-611481863552?w=400&fit=crop','https://images.unsplash.com/photo-1502872364588-894d7d6ddfab?w=400&fit=crop','https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&fit=crop','https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&fit=crop','https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&fit=crop','https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&fit=crop'],
-  hollywood:['https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&fit=crop','https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&fit=crop','https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&fit=crop','https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?w=400&fit=crop','https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=400&fit=crop','https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&fit=crop'],
-  default:['https://images.unsplash.com/photo-1519741497674-611481863552?w=400&fit=crop','https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&fit=crop','https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&fit=crop','https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=400&fit=crop','https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&fit=crop','https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=400&fit=crop']
-};
-
-function getImgs(q){
-  q=(q||'').toLowerCase();
-  for(const k of Object.keys(HAIR_IMAGES)){if(q.includes(k))return HAIR_IMAGES[k]}
-  return Object.values(HAIR_IMAGES).flat().sort(()=>Math.random()-.5).slice(0,6);
+const STORAGE_KEY='bridal_lookbook_v2';
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function newMember(id){return{id:id||uid(),role:'',name:'',faceImg:null,inspoImgs:[],accessories:[],concerns:[],length:'',thickness:'',texture:'',extensions:'',notes:''}}
+let party=[],cur=0,saveTimer=null,memberMode=false;
+function loadFromStorage(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(raw){const data=JSON.parse(raw);party=data.party||[newMember()]}
+    else{party=[newMember()]}
+    const wd=localStorage.getItem('lb_weddingdate')||'';
+    const wdEl=document.getElementById('wdIn');
+    if(wdEl)wdEl.value=wd;
+  }catch(e){party=[newMember()]}
+}
+function saveToStorage(){
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify({party,savedAt:Date.now()}));
+    const ind=document.getElementById('saveIndicator');
+    if(ind){ind.textContent='Saved Automatically';ind.className='save-indicator saved';setTimeout(()=>{ind.textContent='';ind.className='save-indicator'},2500)}
+  }catch(e){showToast('Storage Full — Try Removing Some Photos')}
+}
+function autoSave(field,value){
+  if(field==='name'){
+    party[cur].name=value;
+    if(!party[cur].faceImg){const fc=document.getElementById('faceCircle');const init=fc.querySelector('.fc-init');if(init)init.textContent=initials(party[cur])}
+  }else if(field==='role'){
+    party[cur].role=value;
+    document.getElementById('roleDisplay').textContent=value;
+  }else if(field==='notes'){
+    party[cur].notes=value;
+  }
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{saveToStorage();if(!memberMode)renderHome()},700);
 }
 function initials(p){const n=p.name||(p.role||'?');return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
-
+function getMemberUrl(idx){const base=window.location.href.split('?')[0].split('#')[0];return base+'?member='+party[idx].id}
+function checkMemberMode(){
+  const params=new URLSearchParams(window.location.search);
+  const mid=params.get('member');
+  if(mid){
+    const idx=party.findIndex(p=>p.id===mid);
+    if(idx>-1){memberMode=true;openProfile(idx,true);return true}
+  }
+  return false;
+}
 function renderHome(){
   const list=document.getElementById('partyList');list.innerHTML='';
   party.forEach((p,i)=>{
     const done=p.name||p.faceImg||p.inspoImgs.length||p.length;
-    const d=document.createElement('div');d.className='pitem';d.onclick=()=>openProfile(i);
+    const d=document.createElement('div');d.className='pitem';d.onclick=()=>openProfile(i,false);
     d.innerHTML=`<div class="pav">${p.faceImg?`<img src="${p.faceImg}"/>`:`<span>${initials(p)}</span>`}</div>
 <div class="pinfo"><div class="pname">${p.name||'Unnamed'}</div><div class="prole">${p.role||'No Role Selected'}</div>
 <div class="pstatus">${done?'Profile Started — Tap To Edit':'Tap To Fill Out Profile'}</div></div>
@@ -375,20 +396,35 @@ function renderHome(){
   });
   document.getElementById('partyCount').textContent=`${party.length} Of ${MAX_MEMBERS} Members`;
   document.getElementById('addBtn').style.display=party.length<MAX_MEMBERS?'flex':'none';
+  const linkList=document.getElementById('memberLinkList');linkList.innerHTML='';
+  party.forEach((p,i)=>{
+    const row=document.createElement('div');row.className='member-link-item';
+    row.innerHTML=`<div style="flex:1;min-width:0"><div class="mli-name">${p.name||'Unnamed'}</div><div class="mli-role">${p.role||'No Role'}</div></div>
+<button class="mli-btn" onclick="copyMemberLink(${i})">Copy Link</button>`;
+    linkList.appendChild(row);
+  });
 }
-
+function copyMemberLink(i){
+  const url=getMemberUrl(i);
+  navigator.clipboard.writeText(url).catch(()=>{});
+  showToast('Link Copied For '+(party[i].name||'Member '+(i+1)));
+}
 function addMember(){
   if(party.length>=MAX_MEMBERS){showToast('Maximum 12 Members Reached');return}
-  party.push(newMember());renderHome();openProfile(party.length-1);
+  party.push(newMember());saveToStorage();renderHome();openProfile(party.length-1,false);
 }
-
-function openProfile(i){cur=i;loadProfile(i);goScreen('profile')}
-
-function loadProfile(i){
+function openProfile(i,isMember){cur=i;memberMode=isMember;loadProfile(i,isMember);goScreen('profile')}
+function loadProfile(i,isMember){
   const p=party[i];
   document.getElementById('nameIn').value=p.name;
   document.getElementById('roleDisplay').textContent=p.role||'';
   document.getElementById('roleSelect').value=p.role||'';
+  const banner=document.getElementById('profileBanner');
+  banner.style.display=isMember?'block':'none';
+  const backBtn=document.getElementById('backBtn');
+  const backBtnBottom=document.getElementById('backBtnBottom');
+  if(isMember){backBtn.style.display='none';backBtnBottom.style.display='none'}
+  else{backBtn.style.display='flex';backBtnBottom.style.display='block'}
   updateFaceCircle(p);
   document.getElementById('photoMenu').style.display='none';
   document.getElementById('notesIn').value=p.notes;
@@ -398,52 +434,54 @@ function loadProfile(i){
   document.querySelectorAll('#extensionsChips .rchip').forEach(c=>c.classList.toggle('on',c.textContent.trim()===p.extensions));
   document.querySelectorAll('#accChips .chip').forEach(c=>c.classList.toggle('on',p.accessories.includes(c.textContent.trim())));
   document.querySelectorAll('#concernChips .chip').forEach(c=>c.classList.toggle('on',p.concerns.includes(c.textContent.trim())));
-  renderInspoGrid(i);
-  setInspoTab('search');
+  renderInspoGrid(i);setInspoTab('search');
   document.getElementById('searchGrid').innerHTML='<div class="sinfo">Type A Style And Tap Search</div>';
   document.getElementById('searchIn').value='';
   document.getElementById('urlIn').value='';
   document.getElementById('urlPreviewWrap').style.display='none';
+  document.getElementById('saveIndicator').textContent='';
 }
-
 function updateFaceCircle(p){
   const fc=document.getElementById('faceCircle');fc.innerHTML='';
   if(p.faceImg){fc.innerHTML=`<img src="${p.faceImg}" style="width:100%;height:100%;object-fit:cover"/><div class="fc-overlay">Change Photo</div>`}
   else{fc.innerHTML=`<div class="fc-init">${initials(p)}</div><div class="fc-overlay">Add Photo</div>`}
 }
-
-function saveRole(v){party[cur].role=v;document.getElementById('roleDisplay').textContent=v}
-
 function pickRadio(field,el,val){
   document.querySelectorAll('#'+field+'Chips .rchip').forEach(c=>c.classList.remove('on'));
-  if(party[cur][field]===val){party[cur][field]=''} else{el.classList.add('on');party[cur][field]=val}
+  if(party[cur][field]===val){party[cur][field]=''}else{el.classList.add('on');party[cur][field]=val}
+  saveToStorage();
 }
-
 function toggleChip(el,field){
   el.classList.toggle('on');
   const v=el.textContent.trim();const arr=party[cur][field];
   if(el.classList.contains('on')){if(!arr.includes(v))arr.push(v)}
   else{const i=arr.indexOf(v);if(i>-1)arr.splice(i,1)}
+  saveToStorage();
 }
-
 function togglePhotoMenu(){const m=document.getElementById('photoMenu');m.style.display=m.style.display==='none'?'block':'none'}
 function doLibrary(){document.getElementById('faceLibFile').click();document.getElementById('photoMenu').style.display='none'}
 function doCamera(){document.getElementById('faceCamFile').click();document.getElementById('photoMenu').style.display='none'}
-
 function handleFaceFile(e){
   const f=e.target.files[0];if(!f)return;
   const r=new FileReader();
-  r.onload=ev=>{party[cur].faceImg=ev.target.result;updateFaceCircle(party[cur]);renderHome()};
+  r.onload=ev=>{party[cur].faceImg=ev.target.result;updateFaceCircle(party[cur]);saveToStorage();if(!memberMode)renderHome()};
   r.readAsDataURL(f);e.target.value='';
 }
-
 function setInspoTab(t){
   ['search','url','upload'].forEach(k=>{
     document.getElementById('it-'+k).classList.toggle('on',k===t);
     document.getElementById('ip-'+k).style.display=k===t?'block':'none';
   });
 }
-
+const HAIR_IMAGES={
+  updo:['https://images.unsplash.com/photo-1519741497674-611481863552?w=400&fit=crop','https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&fit=crop','https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&fit=crop','https://images.unsplash.com/photo-1502872364588-894d7d6ddfab?w=400&fit=crop','https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=400&fit=crop','https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&fit=crop'],
+  waves:['https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&fit=crop','https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&fit=crop','https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&fit=crop','https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?w=400&fit=crop','https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&fit=crop','https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&fit=crop'],
+  boho:['https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=400&fit=crop','https://images.unsplash.com/photo-1464863979621-258859e62245?w=400&fit=crop','https://images.unsplash.com/photo-1522308822788-df76e08ab9ca?w=400&fit=crop','https://images.unsplash.com/photo-1552058544-f2b08422138a?w=400&fit=crop','https://images.unsplash.com/photo-1519011985143-d30f4f4f9ff5?w=400&fit=crop','https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&fit=crop'],
+  sleek:['https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&fit=crop','https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&fit=crop','https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=400&fit=crop','https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&fit=crop','https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&fit=crop','https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&fit=crop'],
+  romantic:['https://images.unsplash.com/photo-1519741497674-611481863552?w=400&fit=crop','https://images.unsplash.com/photo-1502872364588-894d7d6ddfab?w=400&fit=crop','https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&fit=crop','https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&fit=crop','https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&fit=crop','https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&fit=crop'],
+  default:['https://images.unsplash.com/photo-1519741497674-611481863552?w=400&fit=crop','https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&fit=crop','https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&fit=crop','https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=400&fit=crop','https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&fit=crop','https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=400&fit=crop']
+};
+function getImgs(q){q=(q||'').toLowerCase();for(const k of Object.keys(HAIR_IMAGES)){if(q.includes(k))return HAIR_IMAGES[k]}return Object.values(HAIR_IMAGES).flat().sort(()=>Math.random()-.5).slice(0,6)}
 function doSearch(){
   const q=document.getElementById('searchIn').value.trim();
   const g=document.getElementById('searchGrid');
@@ -460,35 +498,30 @@ function doSearch(){
     });
   },400);
 }
-
 function toggleSri(el,src){
   const p=party[cur];
   if(el.classList.contains('picked')){p.inspoImgs=p.inspoImgs.filter(s=>s!==src);el.classList.remove('picked')}
   else{if(p.inspoImgs.length>=8){showToast('Max 8 Photos');return}p.inspoImgs.push(src);el.classList.add('picked')}
-  renderInspoGrid(cur);
+  renderInspoGrid(cur);saveToStorage();
 }
-
 function onUrlInput(v){
   const wrap=document.getElementById('urlPreviewWrap');const img=document.getElementById('urlPreviewImg');
   if(v.trim().startsWith('http')){img.src=v.trim();img.onload=()=>{wrap.style.display='block'};img.onerror=()=>{wrap.style.display='none'}}
   else{wrap.style.display='none'}
 }
-
 function addUrl(){
   const u=document.getElementById('urlIn').value.trim();
   if(!u||!u.startsWith('http')){showToast('Please Paste A Valid Image URL');return}
   if(party[cur].inspoImgs.length>=8){showToast('Max 8 Photos');return}
   party[cur].inspoImgs.push(u);
   document.getElementById('urlIn').value='';document.getElementById('urlPreviewWrap').style.display='none';
-  renderInspoGrid(cur);showToast('Photo Added');
+  renderInspoGrid(cur);saveToStorage();showToast('Photo Added');
 }
-
 function handleInspoFile(e){
   const files=Array.from(e.target.files);const p=party[cur];const slots=8-p.inspoImgs.length;
-  files.slice(0,slots).forEach(f=>{const r=new FileReader();r.onload=ev=>{p.inspoImgs.push(ev.target.result);renderInspoGrid(cur)};r.readAsDataURL(f)});
+  files.slice(0,slots).forEach(f=>{const r=new FileReader();r.onload=ev=>{p.inspoImgs.push(ev.target.result);renderInspoGrid(cur);saveToStorage()};r.readAsDataURL(f)});
   e.target.value='';
 }
-
 function renderInspoGrid(i){
   const p=party[i];const g=document.getElementById('inspoGrid');g.innerHTML='';
   p.inspoImgs.forEach((s,j)=>{
@@ -498,24 +531,14 @@ function renderInspoGrid(i){
     btn.onclick=e=>{e.stopPropagation();rmInspo(i,j)};
     d.appendChild(img);d.appendChild(btn);g.appendChild(d);
   });
-  if(p.inspoImgs.length<8){
-    const a=document.createElement('div');a.className='ig-add';a.textContent='+';
-    a.onclick=()=>document.getElementById('inspoFile').click();g.appendChild(a);
-  }
+  if(p.inspoImgs.length<8){const a=document.createElement('div');a.className='ig-add';a.textContent='+';a.onclick=()=>document.getElementById('inspoFile').click();g.appendChild(a)}
 }
-
 function rmInspo(pi,ji){
-  const removed=party[pi].inspoImgs[ji];party[pi].inspoImgs.splice(ji,1);renderInspoGrid(pi);
+  const removed=party[pi].inspoImgs[ji];party[pi].inspoImgs.splice(ji,1);renderInspoGrid(pi);saveToStorage();
   document.querySelectorAll('.sri').forEach(el=>{const img=el.querySelector('img');if(img&&img.src===removed)el.classList.remove('picked')});
 }
-
-function saveName(v){
-  party[cur].name=v;
-  if(!party[cur].faceImg){const fc=document.getElementById('faceCircle');const init=fc.querySelector('.fc-init');if(init)init.textContent=initials(party[cur])}
-}
-function saveNotes(v){party[cur].notes=v}
-function saveAndBack(){renderHome();goScreen('home');showToast('Profile Saved')}
-
+function saveAndBack(){saveToStorage();renderHome();goScreen('home');showToast('Profile Saved')}
+function clearAll(){localStorage.removeItem(STORAGE_KEY);localStorage.removeItem('lb_weddingdate');party=[newMember()];renderHome();showToast('Cleared — Fresh Start')}
 function renderLookbook(){
   const c=document.getElementById('lbContent');c.innerHTML='';
   const any=party.some(p=>p.name||p.faceImg||p.inspoImgs.length||p.accessories.length||p.notes||p.length);
@@ -544,19 +567,20 @@ ${p.notes?`<div class="lb-note">"${p.notes}"</div>`:''}
 </div>`;
     c.appendChild(card);
   });
+  document.getElementById('shareUrl').value=window.location.href.split('?')[0];
 }
-
 function goScreen(s){
   document.querySelectorAll('.screen').forEach(el=>el.classList.remove('on'));
   document.getElementById('s-'+s).classList.add('on');
-  if(s==='lookbook'){renderLookbook();document.getElementById('shareUrl').value=window.location.href}
+  if(s==='lookbook')renderLookbook();
   window.scrollTo(0,0);
 }
-function copyLink(){navigator.clipboard.writeText(window.location.href).catch(()=>{});showToast('Link Copied')}
+function copyLink(){navigator.clipboard.writeText(window.location.href.split('?')[0]).catch(()=>{});showToast('Lookbook Link Copied')}
 function dlPdf(){showToast('Opening Print Dialog — Save As PDF');setTimeout(()=>window.print(),400)}
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
-
+loadFromStorage();
 renderHome();
+checkMemberMode();
 </script>
 </body>
 </html>
