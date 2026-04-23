@@ -9,6 +9,7 @@
 :root{
   --cream:#F9F6F1;--cream-dark:#F0EBE1;--cream-border:#E2D9CC;--cream-border-strong:#C8BDB0;
   --ink:#1C1917;--ink-mid:#6B6560;--ink-light:#A09A93;--white:#FFFFFF;
+  --green:#3B6D11;
 }
 body{font-family:Georgia,'Times New Roman',serif;background:var(--cream);min-height:100vh}
 .app{max-width:500px;margin:0 auto;padding:1.5rem 1.25rem 4rem;background:var(--cream);position:relative}
@@ -17,7 +18,7 @@ body{font-family:Georgia,'Times New Roman',serif;background:var(--cream);min-hei
 .hdr .sub{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-light);margin-top:5px}
 .hdr .ornament{font-size:13px;color:var(--cream-border-strong);letter-spacing:.3em;margin:8px 0 0}
 .screen{display:none}.screen.on{display:block}
-.btn{width:100%;padding:13px;font-size:11px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-family:Georgia,serif;transition:all .18s}
+.btn{width:100%;padding:13px;font-size:11px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-family:Georgia,serif;transition:all .18s;border-radius:0}
 .btn-s{background:var(--ink);border:1px solid var(--ink);color:var(--cream)}
 .btn-s:hover{background:#2d2926}
 .btn-o{background:transparent;border:1px solid var(--cream-border-strong);color:var(--ink)}
@@ -26,12 +27,26 @@ body{font-family:Georgia,'Times New Roman',serif;background:var(--cream);min-hei
 .btn-ghost{background:transparent;border:none;color:var(--ink-light);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:10px;font-family:Georgia,serif;width:100%;text-align:center}
 .btn-ghost:hover{color:var(--ink)}
 .slabel{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-light);font-weight:400;margin-bottom:.6rem;font-family:Georgia,serif}
-.finput{width:100%;padding:10px 12px;font-size:13px;border:1px solid var(--cream-border);background:var(--white);color:var(--ink);font-family:Georgia,'Times New Roman',serif;outline:none;transition:border-color .18s;appearance:none;-webkit-appearance:none}
+.finput{width:100%;padding:10px 12px;font-size:13px;border:1px solid var(--cream-border);background:var(--white);color:var(--ink);font-family:Georgia,'Times New Roman',serif;outline:none;transition:border-color .18s;appearance:none;-webkit-appearance:none;border-radius:0}
 .finput:focus{border-color:var(--cream-border-strong)}
 textarea.finput{resize:vertical;min-height:90px;line-height:1.6}
 select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23A09A93' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;cursor:pointer;font-family:Georgia,'Times New Roman',serif;font-size:13px}
 .field{margin-bottom:1.4rem}
 .divider{border:none;border-top:1px solid var(--cream-border);margin:1.4rem 0}
+.loading-screen{text-align:center;padding:3rem 1rem;color:var(--ink-light);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-style:italic}
+.spinner-lg{width:28px;height:28px;border:2px solid var(--cream-border);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 1rem}
+.new-party-btn{background:var(--ink);border:1px solid var(--ink);color:var(--cream);padding:1.25rem;text-align:center;cursor:pointer;width:100%;font-family:Georgia,serif;font-size:13px;letter-spacing:.08em;margin-bottom:1.4rem}
+.new-party-btn:hover{background:#2d2926}
+.new-party-btn .btn-sub{font-size:10px;letter-spacing:.06em;display:block;margin-top:4px;color:rgba(249,246,241,.6)}
+.generated-link-box{background:var(--cream-dark);border:1px solid var(--cream-border);padding:1.1rem;margin-bottom:1.4rem;display:none}
+.link-row{display:flex;gap:6px}
+.link-display{flex:1;padding:9px 10px;font-size:11px;border:1px solid var(--cream-border);background:var(--white);color:var(--ink-mid);font-family:Georgia,serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.copy-btn{padding:9px 14px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);background:var(--ink);color:var(--cream);cursor:pointer;font-family:Georgia,serif;white-space:nowrap;flex-shrink:0}
+.copy-btn:hover{background:#2d2926}
+.link-hint{font-size:10px;color:var(--ink-light);font-style:italic;margin-top:.5rem;line-height:1.5}
+.party-banner{background:var(--ink);color:var(--cream);padding:.75rem 1rem;text-align:center;margin-bottom:1.5rem}
+.party-banner p{font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.party-banner .party-code{font-size:10px;color:rgba(249,246,241,.5);letter-spacing:.08em;margin-top:3px;font-style:italic}
 .party-list{display:flex;flex-direction:column;gap:1px;margin-bottom:1rem;border:1px solid var(--cream-border);background:var(--cream-border);max-height:420px;overflow-y:auto}
 .pitem{display:flex;align-items:center;gap:14px;padding:.85rem 1.1rem;cursor:pointer;background:var(--cream);transition:background .15s;flex-shrink:0}
 .pitem:hover{background:var(--cream-dark)}
@@ -41,11 +56,13 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
 .pname{font-size:13px;color:var(--ink)}
 .prole{font-size:9px;color:var(--ink-light);letter-spacing:.12em;text-transform:uppercase;margin-top:2px}
 .pstatus{font-size:10px;color:var(--ink-light);margin-top:1px;font-style:italic}
+.pstatus.done{color:var(--green)}
 .parrow{font-size:14px;color:var(--cream-border-strong);flex-shrink:0}
 .party-count{font-size:10px;color:var(--ink-light);font-style:italic;text-align:right;margin-bottom:.75rem}
 .add-item{display:flex;align-items:center;justify-content:center;gap:8px;border:1px dashed var(--cream-border-strong);padding:.85rem 1rem;cursor:pointer;color:var(--ink-light);background:var(--cream);margin-bottom:1.4rem}
 .add-item:hover{background:var(--cream-dark)}
 .add-item span{font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.share-this-link{background:var(--cream-dark);border:1px solid var(--cream-border);padding:1rem;margin-bottom:1.4rem}
 .back-btn{display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;color:var(--ink-light);font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.25rem;font-family:Georgia,serif;padding:0}
 .back-btn:hover{color:var(--ink)}
 .face-zone{text-align:center;margin-bottom:1.4rem}
@@ -62,12 +79,14 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
 .popt:hover{background:var(--cream-dark)}
 .popt-icon{font-size:18px;margin-bottom:4px;display:block}
 .popt-label{font-size:9px;letter-spacing:.1em;text-transform:uppercase;display:block;color:var(--ink-mid)}
+.save-indicator{font-size:9px;color:var(--ink-light);letter-spacing:.1em;text-transform:uppercase;text-align:right;padding:.3rem 0;font-style:italic;min-height:1.2rem;transition:color .2s}
+.save-indicator.saved{color:var(--green)}
 .tabs3{display:flex;border:1px solid var(--cream-border);overflow:hidden;margin-bottom:.75rem}
 .t3{flex:1;padding:9px 4px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;text-align:center;border:none;border-right:1px solid var(--cream-border);cursor:pointer;background:var(--cream-dark);color:var(--ink-light);font-family:Georgia,serif;transition:all .15s}
 .t3:last-child{border-right:none}
 .t3.on{background:var(--ink);color:var(--cream)}
 .search-row{display:flex;gap:6px;margin-bottom:.6rem}
-.search-row input{flex:1;padding:9px 11px;font-size:12px;border:1px solid var(--cream-border);background:var(--white);color:var(--ink);font-family:Georgia,serif;outline:none}
+.search-row input{flex:1;padding:9px 11px;font-size:12px;border:1px solid var(--cream-border);background:var(--white);color:var(--ink);font-family:Georgia,serif;outline:none;border-radius:0}
 .search-row input:focus{border-color:var(--cream-border-strong)}
 .sr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;min-height:80px}
 .sri{aspect-ratio:1;overflow:hidden;border:2px solid transparent;cursor:pointer;background:var(--cream-dark);position:relative;transition:border-color .15s}
@@ -92,6 +111,10 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
 .rchip.on{background:var(--ink);border-color:var(--ink);color:var(--cream)}
 .url-preview-wrap{margin:.5rem 0;border:1px solid var(--cream-border);overflow:hidden;display:none}
 .url-preview-wrap img{width:100%;max-height:150px;object-fit:cover;display:block}
+.upload-zone{border:1px dashed var(--cream-border-strong);padding:1.25rem;text-align:center;background:var(--cream);cursor:pointer}
+.upload-zone:hover{background:var(--cream-dark)}
+.upload-zone p{font-size:12px;color:var(--ink-mid);font-style:italic}
+.upload-zone span{font-size:9px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:3px}
 .lb-person{background:var(--white);border:1px solid var(--cream-border);margin-bottom:10px}
 .lb-top{display:flex;align-items:center;gap:14px;padding:1rem 1.1rem;border-bottom:1px solid var(--cream-border)}
 .lb-face{width:54px;height:54px;border-radius:50%;border:1px solid var(--cream-border);overflow:hidden;flex-shrink:0;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--ink-mid)}
@@ -107,33 +130,17 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
 .lb-inspos .li{aspect-ratio:1;overflow:hidden;border:1px solid var(--cream-border);background:var(--cream-dark)}
 .lb-inspos .li img{width:100%;height:100%;object-fit:cover;display:block}
 .lb-inspos .li-ph{display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--ink-light);letter-spacing:.06em;text-transform:uppercase}
-.share-box{border:1px solid var(--cream-border);padding:1.1rem;margin-top:1.25rem;background:var(--white)}
-.share-url{width:100%;padding:8px 10px;font-size:11px;border:1px solid var(--cream-border);background:var(--cream);color:var(--ink-light);font-family:Georgia,serif;margin-bottom:8px}
-.btn-row{display:flex;gap:8px}.btn-row .btn{flex:1}
 .empty-state{text-align:center;padding:2.5rem 1rem;color:var(--ink-light);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-style:italic}
-.upload-zone{border:1px dashed var(--cream-border-strong);padding:1.25rem;text-align:center;background:var(--cream);cursor:pointer}
-.upload-zone:hover{background:var(--cream-dark)}
-.upload-zone p{font-size:12px;color:var(--ink-mid);font-style:italic}
-.upload-zone span{font-size:9px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:3px}
+.share-box{border:1px solid var(--cream-border);padding:1.1rem;margin-top:1.25rem;background:var(--white)}
+.share-link-row{display:flex;gap:6px;align-items:center}
+.share-link-box{flex:1;padding:8px 10px;font-size:10px;border:1px solid var(--cream-border);background:var(--cream);color:var(--ink-mid);font-family:Georgia,serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(14px);background:var(--ink);color:var(--cream);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:8px 20px;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;z-index:999}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .hint{font-size:10px;color:var(--ink-light);letter-spacing:.03em;line-height:1.6;margin-top:4px;font-style:italic}
 .spinner{display:inline-block;width:14px;height:14px;border:1.5px solid var(--cream-border);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
 input[type=file]{display:none}
-.save-indicator{font-size:9px;color:var(--ink-light);letter-spacing:.1em;text-transform:uppercase;text-align:right;padding:.3rem 0;font-style:italic;min-height:1.2rem}
-.save-indicator.saved{color:#3B6D11}
-.share-panel{background:var(--cream-dark);border:1px solid var(--cream-border);padding:1rem;margin-top:1rem}
-.member-link-list{display:flex;flex-direction:column;gap:6px;margin-top:.75rem}
-.member-link-item{display:flex;align-items:center;gap:8px;padding:.6rem .75rem;background:var(--white);border:1px solid var(--cream-border)}
-.mli-name{font-size:12px;color:var(--ink)}
-.mli-role{font-size:9px;color:var(--ink-light);letter-spacing:.08em;text-transform:uppercase}
-.mli-btn{padding:5px 10px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--cream-border-strong);background:transparent;color:var(--ink);cursor:pointer;font-family:Georgia,serif;white-space:nowrap;flex-shrink:0}
-.mli-btn:hover{background:var(--cream-dark)}
-.profile-banner{background:var(--cream-dark);border:1px solid var(--cream-border);padding:.75rem 1rem;margin-bottom:1rem;font-size:11px;color:var(--ink-mid);font-style:italic;text-align:center;display:none}
-.share-link-row{display:flex;gap:6px;align-items:center}
-.share-link-box{flex:1;padding:8px 10px;font-size:10px;border:1px solid var(--cream-border);background:var(--white);color:var(--ink-mid);font-family:Georgia,serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-@media print{.share-box,.share-panel,.back-btn,.btn-ghost,.add-item,#addBtn,.save-indicator,.profile-banner{display:none!important}}
+@media print{.share-box,.share-this-link,.back-btn,.btn-ghost,.add-item,#addBtn,.save-indicator,.photo-menu,.new-party-btn,.generated-link-box{display:none!important}}
 </style>
 </head>
 <body>
@@ -143,9 +150,50 @@ input[type=file]{display:none}
     <div class="sub">Hair Vision Builder</div>
     <div class="ornament">— ✦ —</div>
   </div>
-  <div id="s-home" class="screen on">
+
+  <div id="s-loading" class="screen on">
+    <div class="loading-screen">
+      <div class="spinner-lg"></div>
+      <p>Loading...</p>
+    </div>
+  </div>
+
+  <div id="s-stylist" class="screen">
     <div class="field">
-      <div class="slabel">Bridal Party</div>
+      <div class="slabel">Stylist Dashboard</div>
+      <p class="hint" style="margin-bottom:1rem">Generate a fresh unique link for each new bride. Share that link with her — anyone she sends it to can open and edit the lookbook.</p>
+      <div class="new-party-btn" onclick="createNewParty()">
+        + Create New Bridal Party Lookbook
+        <span class="btn-sub">Generates a unique shareable link</span>
+      </div>
+      <div class="generated-link-box" id="generatedLinkBox">
+        <div class="slabel">New Lookbook Link — Share With Bride</div>
+        <div class="link-row">
+          <input class="link-display" id="generatedLinkDisplay" readonly value="" />
+          <button class="copy-btn" onclick="copyGeneratedLink()">Copy</button>
+        </div>
+        <p class="link-hint">Text or email this link to the bride. Anyone who opens it can add profiles and inspo photos. You can open it anytime to view the full lookbook.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <p class="hint" style="text-align:center">To open an existing lookbook, use the original link you generated for that bride.</p>
+  </div>
+
+  <div id="s-party" class="screen">
+    <div class="party-banner">
+      <p>Bridal Party Lookbook</p>
+      <div class="party-code" id="partyCodeDisplay"></div>
+    </div>
+    <div class="share-this-link">
+      <div class="slabel" style="margin-bottom:.5rem">Share This Lookbook</div>
+      <div class="link-row">
+        <input class="link-display" id="partyShareDisplay" readonly value="" />
+        <button class="copy-btn" onclick="copyPartyLink()">Copy Link</button>
+      </div>
+      <p class="hint">Anyone with this link can view and edit all profiles.</p>
+    </div>
+    <div class="field">
+      <div class="slabel">Party Members</div>
       <p class="party-count" id="partyCount"></p>
       <div class="party-list" id="partyList"></div>
       <div class="add-item" id="addBtn" onclick="addMember()">
@@ -153,28 +201,20 @@ input[type=file]{display:none}
         <span>Add Party Member</span>
       </div>
     </div>
-    <div class="share-panel">
-      <div class="slabel">Share Individual Profile Links</div>
-      <p class="hint" style="margin-bottom:.75rem">Each person gets their own link — tap Copy Link next to their name, then text or email it to them. They open it on their phone, fill it out, and it saves automatically.</p>
-      <div class="member-link-list" id="memberLinkList"></div>
-    </div>
-    <div style="display:flex;gap:8px;margin-top:1.4rem">
+    <div style="display:flex;gap:8px;margin-top:.5rem">
       <button class="btn btn-o" onclick="goScreen('lookbook')">Preview Lookbook</button>
       <button class="btn btn-s" onclick="goScreen('lookbook')">Export</button>
     </div>
-    <div style="margin-top:.75rem;text-align:center">
-      <button class="btn-ghost" onclick="if(confirm('Clear all data and start fresh?'))clearAll()">Clear All &amp; Start Over</button>
-    </div>
   </div>
+
   <div id="s-profile" class="screen">
-    <button class="back-btn" id="backBtn" onclick="goScreen('home')">&#8592; Back To Party</button>
-    <div class="profile-banner" id="profileBanner">Filling Out Your Personal Profile — Changes Save Automatically</div>
+    <button class="back-btn" onclick="goScreen('party')">&#8592; Back To Party</button>
     <div class="face-zone">
       <div class="face-circle" id="faceCircle" onclick="togglePhotoMenu()">
         <div class="fc-init" id="fcInit">?</div>
         <div class="fc-overlay">Add Photo</div>
       </div>
-      <input class="name-big" id="nameIn" type="text" placeholder="Your Name" oninput="autoSave('name',this.value)" />
+      <input class="name-big" id="nameIn" type="text" placeholder="Your Name" oninput="fieldChanged('name',this.value)" />
       <p class="role-display" id="roleDisplay"></p>
       <div class="photo-menu" id="photoMenu">
         <div class="slabel">Upload A Photo Of Yourself</div>
@@ -195,7 +235,7 @@ input[type=file]{display:none}
     <div class="divider"></div>
     <div class="field">
       <div class="slabel">Role In The Party</div>
-      <select class="finput" id="roleSelect" onchange="autoSave('role',this.value)">
+      <select class="finput" id="roleSelect" onchange="fieldChanged('role',this.value)">
         <option value="">— Select A Role —</option>
         <option value="Bridal Guest">Bridal Guest</option>
         <option value="Bride">Bride</option>
@@ -308,170 +348,175 @@ input[type=file]{display:none}
     <div class="divider"></div>
     <div class="field">
       <div class="slabel">Notes &amp; Concerns For Stylist</div>
-      <textarea class="finput" id="notesIn" placeholder="Anything Else To Share — Allergies, Timing, Specific Preferences..." oninput="autoSave('notes',this.value)"></textarea>
+      <textarea class="finput" id="notesIn" placeholder="Anything Else To Share — Allergies, Timing, Specific Preferences..." oninput="fieldChanged('notes',this.value)"></textarea>
     </div>
-    <button class="btn btn-s" onclick="saveAndBack()" style="margin-bottom:8px">Save Profile</button>
-    <button class="btn-ghost" id="backBtnBottom" onclick="goScreen('home')">&#8592; Back Without Saving</button>
+    <button class="btn btn-s" onclick="goScreen('party')" style="margin-bottom:8px">Done — Back To Party</button>
   </div>
+
   <div id="s-lookbook" class="screen">
-    <button class="back-btn" onclick="goScreen('home')">&#8592; Back To Party</button>
+    <button class="back-btn" onclick="goScreen('party')">&#8592; Back To Party</button>
     <div style="text-align:center;margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:1px solid var(--cream-border)">
       <p style="font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink)">Bridal Party Lookbook</p>
-      <input class="finput" id="wdIn" type="text" placeholder="Wedding Date..." style="font-size:11px;padding:6px 10px;margin-top:.6rem;text-align:center;letter-spacing:.06em" oninput="localStorage.setItem('lb_weddingdate',this.value)" />
+      <input class="finput" id="wdIn" type="text" placeholder="Wedding Date..." style="font-size:11px;padding:6px 10px;margin-top:.6rem;text-align:center;letter-spacing:.06em" oninput="weddingDateChanged(this.value)" />
     </div>
     <div id="lbContent"></div>
     <div class="share-box">
-      <div class="slabel" style="margin-bottom:.6rem">Share Full Lookbook With Stylist</div>
+      <div class="slabel" style="margin-bottom:.6rem">Share With Hairstylist</div>
       <div class="share-link-row">
         <input class="share-link-box" id="shareUrl" readonly value="" />
-        <button class="btn btn-s btn-sm" onclick="copyLink()">Copy</button>
+        <button class="btn btn-s btn-sm" onclick="copyPartyLink()">Copy</button>
       </div>
       <div style="display:flex;gap:8px;margin-top:.75rem">
         <button class="btn btn-o" onclick="dlPdf()">Download PDF</button>
       </div>
     </div>
   </div>
+
   <div class="toast" id="toast"></div>
 </div>
+
 <input type="file" id="faceLibFile" accept="image/*" onchange="handleFaceFile(event)" />
 <input type="file" id="faceCamFile" accept="image/*" capture="user" onchange="handleFaceFile(event)" />
 <input type="file" id="inspoFile" accept="image/*" multiple onchange="handleInspoFile(event)" />
+
 <script>
-const MAX_MEMBERS=12;
-const STORAGE_KEY='bridal_lookbook_v2';
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
-function newMember(id){return{id:id||uid(),role:'',name:'',faceImg:null,inspoImgs:[],accessories:[],concerns:[],length:'',thickness:'',texture:'',extensions:'',notes:''}}
-let party=[],cur=0,saveTimer=null,memberMode=false;
-function loadFromStorage(){
+const SUPABASE_URL='https://jnpuzhiyxoxfdrkvovue.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpucHV6aGl5eG94ZmRya3ZvdnVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4OTg1NjYsImV4cCI6MjA5MjQ3NDU2Nn0.7RYW5WRPPRc7b2toe5_eBRy0gw-XMN_y2CQgHZkEHiU';
+const MAX=12;
+let partyCode=null,partyData={members:[],weddingDate:''},curMember=0,saveTimer=null;
+function uid(){return Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,6)}
+function newMember(){return{id:uid(),name:'',role:'',faceImg:null,inspoImgs:[],accessories:[],concerns:[],length:'',thickness:'',texture:'',extensions:'',notes:''}}
+function initials(m){const n=m.name||(m.role||'?');return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
+function baseUrl(){return window.location.href.split('?')[0]}
+function partyUrl(code){return baseUrl()+'?party='+code}
+async function sbFetch(path,opts){
+  return fetch(SUPABASE_URL+path,{...opts,headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,...(opts&&opts.headers)}});
+}
+async function loadParty(code){
+  const r=await sbFetch('/rest/v1/parties?id=eq.'+code+'&select=*');
+  const rows=await r.json();return rows&&rows.length?rows[0]:null;
+}
+async function saveParty(){
+  if(!partyCode)return;
+  setSaveIndicator('saving');
   try{
-    const raw=localStorage.getItem(STORAGE_KEY);
-    if(raw){const data=JSON.parse(raw);party=data.party||[newMember()]}
-    else{party=[newMember()]}
-    const wd=localStorage.getItem('lb_weddingdate')||'';
-    const wdEl=document.getElementById('wdIn');
-    if(wdEl)wdEl.value=wd;
-  }catch(e){party=[newMember()]}
+    await sbFetch('/rest/v1/parties?id=eq.'+partyCode,{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({data:partyData,updated_at:new Date().toISOString()})});
+    setSaveIndicator('saved');
+  }catch(e){setSaveIndicator('error')}
 }
-function saveToStorage(){
-  try{
-    localStorage.setItem(STORAGE_KEY,JSON.stringify({party,savedAt:Date.now()}));
-    const ind=document.getElementById('saveIndicator');
-    if(ind){ind.textContent='Saved Automatically';ind.className='save-indicator saved';setTimeout(()=>{ind.textContent='';ind.className='save-indicator'},2500)}
-  }catch(e){showToast('Storage Full — Try Removing Some Photos')}
+async function createPartyRow(code){
+  await sbFetch('/rest/v1/parties',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({id:code,data:partyData})});
 }
-function autoSave(field,value){
-  if(field==='name'){
-    party[cur].name=value;
-    if(!party[cur].faceImg){const fc=document.getElementById('faceCircle');const init=fc.querySelector('.fc-init');if(init)init.textContent=initials(party[cur])}
-  }else if(field==='role'){
-    party[cur].role=value;
-    document.getElementById('roleDisplay').textContent=value;
-  }else if(field==='notes'){
-    party[cur].notes=value;
-  }
-  clearTimeout(saveTimer);
-  saveTimer=setTimeout(()=>{saveToStorage();if(!memberMode)renderHome()},700);
+function setSaveIndicator(state){
+  const el=document.getElementById('saveIndicator');if(!el)return;
+  if(state==='saving'){el.textContent='Saving...';el.className='save-indicator'}
+  else if(state==='saved'){el.textContent='Saved';el.className='save-indicator saved';setTimeout(()=>{el.textContent='';el.className='save-indicator'},2000)}
+  else{el.textContent='Save failed — check connection';el.className='save-indicator'}
 }
-function initials(p){const n=p.name||(p.role||'?');return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
-function getMemberUrl(idx){const base=window.location.href.split('?')[0].split('#')[0];return base+'?member='+party[idx].id}
-function checkMemberMode(){
+function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveParty,800)}
+async function init(){
   const params=new URLSearchParams(window.location.search);
-  const mid=params.get('member');
-  if(mid){
-    const idx=party.findIndex(p=>p.id===mid);
-    if(idx>-1){memberMode=true;openProfile(idx,true);return true}
-  }
-  return false;
+  const code=params.get('party');
+  if(!code){goScreen('stylist');return}
+  partyCode=code;
+  const row=await loadParty(code);
+  if(row&&row.data){partyData=row.data;if(!partyData.members)partyData.members=[];if(!partyData.weddingDate)partyData.weddingDate=''}
+  else{partyData={members:[],weddingDate:''}}
+  document.getElementById('partyCodeDisplay').textContent='Party: '+code;
+  const url=partyUrl(code);
+  document.getElementById('partyShareDisplay').value=url;
+  document.getElementById('shareUrl').value=url;
+  renderParty();goScreen('party');
 }
-function renderHome(){
+async function createNewParty(){
+  const code=uid();partyCode=code;partyData={members:[],weddingDate:''};
+  await createPartyRow(code);
+  const url=partyUrl(code);
+  document.getElementById('generatedLinkDisplay').value=url;
+  document.getElementById('generatedLinkBox').style.display='block';
+  copyToClipboard(url);showToast('New Lookbook Created — Link Copied!');
+}
+function copyGeneratedLink(){copyToClipboard(document.getElementById('generatedLinkDisplay').value);showToast('Link Copied')}
+function copyPartyLink(){copyToClipboard(partyUrl(partyCode));showToast('Link Copied')}
+function copyToClipboard(t){navigator.clipboard.writeText(t).catch(()=>{})}
+function renderParty(){
   const list=document.getElementById('partyList');list.innerHTML='';
-  party.forEach((p,i)=>{
-    const done=p.name||p.faceImg||p.inspoImgs.length||p.length;
-    const d=document.createElement('div');d.className='pitem';d.onclick=()=>openProfile(i,false);
-    d.innerHTML=`<div class="pav">${p.faceImg?`<img src="${p.faceImg}"/>`:`<span>${initials(p)}</span>`}</div>
-<div class="pinfo"><div class="pname">${p.name||'Unnamed'}</div><div class="prole">${p.role||'No Role Selected'}</div>
-<div class="pstatus">${done?'Profile Started — Tap To Edit':'Tap To Fill Out Profile'}</div></div>
+  const members=partyData.members||[];
+  members.forEach((m,i)=>{
+    const done=m.name||m.faceImg||(m.inspoImgs&&m.inspoImgs.length);
+    const d=document.createElement('div');d.className='pitem';d.onclick=()=>openMember(i);
+    d.innerHTML=`<div class="pav">${m.faceImg?`<img src="${m.faceImg}"/>`:`<span>${initials(m)}</span>`}</div>
+<div class="pinfo"><div class="pname">${m.name||'Unnamed'}</div><div class="prole">${m.role||'No Role Selected'}</div>
+<div class="pstatus${done?' done':''}">${done?'Profile Started — Tap To Edit':'Tap To Fill Out Profile'}</div></div>
 <div class="parrow">›</div>`;
     list.appendChild(d);
   });
-  document.getElementById('partyCount').textContent=`${party.length} Of ${MAX_MEMBERS} Members`;
-  document.getElementById('addBtn').style.display=party.length<MAX_MEMBERS?'flex':'none';
-  const linkList=document.getElementById('memberLinkList');linkList.innerHTML='';
-  party.forEach((p,i)=>{
-    const row=document.createElement('div');row.className='member-link-item';
-    row.innerHTML=`<div style="flex:1;min-width:0"><div class="mli-name">${p.name||'Unnamed'}</div><div class="mli-role">${p.role||'No Role'}</div></div>
-<button class="mli-btn" onclick="copyMemberLink(${i})">Copy Link</button>`;
-    linkList.appendChild(row);
-  });
-}
-function copyMemberLink(i){
-  const url=getMemberUrl(i);
-  navigator.clipboard.writeText(url).catch(()=>{});
-  showToast('Link Copied For '+(party[i].name||'Member '+(i+1)));
+  document.getElementById('partyCount').textContent=`${members.length} Of ${MAX} Members`;
+  document.getElementById('addBtn').style.display=members.length<MAX?'flex':'none';
 }
 function addMember(){
-  if(party.length>=MAX_MEMBERS){showToast('Maximum 12 Members Reached');return}
-  party.push(newMember());saveToStorage();renderHome();openProfile(party.length-1,false);
+  if((partyData.members||[]).length>=MAX){showToast('Maximum 12 Members Reached');return}
+  if(!partyData.members)partyData.members=[];
+  partyData.members.push(newMember());renderParty();saveParty();openMember(partyData.members.length-1);
 }
-function openProfile(i,isMember){cur=i;memberMode=isMember;loadProfile(i,isMember);goScreen('profile')}
-function loadProfile(i,isMember){
-  const p=party[i];
-  document.getElementById('nameIn').value=p.name;
-  document.getElementById('roleDisplay').textContent=p.role||'';
-  document.getElementById('roleSelect').value=p.role||'';
-  const banner=document.getElementById('profileBanner');
-  banner.style.display=isMember?'block':'none';
-  const backBtn=document.getElementById('backBtn');
-  const backBtnBottom=document.getElementById('backBtnBottom');
-  if(isMember){backBtn.style.display='none';backBtnBottom.style.display='none'}
-  else{backBtn.style.display='flex';backBtnBottom.style.display='block'}
-  updateFaceCircle(p);
+function openMember(i){curMember=i;loadMemberEditor(i);goScreen('profile')}
+function loadMemberEditor(i){
+  const m=partyData.members[i];
+  document.getElementById('nameIn').value=m.name||'';
+  document.getElementById('roleSelect').value=m.role||'';
+  document.getElementById('roleDisplay').textContent=m.role||'';
+  updateFaceCircle(m);
   document.getElementById('photoMenu').style.display='none';
-  document.getElementById('notesIn').value=p.notes;
-  document.querySelectorAll('#lengthChips .rchip').forEach(c=>c.classList.toggle('on',c.textContent.trim()===p.length));
-  document.querySelectorAll('#thicknessChips .rchip').forEach(c=>c.classList.toggle('on',c.textContent.trim()===p.thickness));
-  document.querySelectorAll('#textureChips .rchip').forEach(c=>c.classList.toggle('on',c.textContent.trim()===p.texture));
-  document.querySelectorAll('#extensionsChips .rchip').forEach(c=>c.classList.toggle('on',c.textContent.trim()===p.extensions));
-  document.querySelectorAll('#accChips .chip').forEach(c=>c.classList.toggle('on',p.accessories.includes(c.textContent.trim())));
-  document.querySelectorAll('#concernChips .chip').forEach(c=>c.classList.toggle('on',p.concerns.includes(c.textContent.trim())));
+  document.getElementById('notesIn').value=m.notes||'';
+  document.querySelectorAll('#lengthChips .rchip').forEach(c=>c.classList.toggle('on',c.textContent.trim()===(m.length||'')));
+  document.querySelectorAll('#thicknessChips .rchip').forEach(c=>c.classList.toggle('on',c.textContent.trim()===(m.thickness||'')));
+  document.querySelectorAll('#textureChips .rchip').forEach(c=>c.classList.toggle('on',c.textContent.trim()===(m.texture||'')));
+  document.querySelectorAll('#extensionsChips .rchip').forEach(c=>c.classList.toggle('on',c.textContent.trim()===(m.extensions||'')));
+  document.querySelectorAll('#accChips .chip').forEach(c=>c.classList.toggle('on',(m.accessories||[]).includes(c.textContent.trim())));
+  document.querySelectorAll('#concernChips .chip').forEach(c=>c.classList.toggle('on',(m.concerns||[]).includes(c.textContent.trim())));
   renderInspoGrid(i);setInspoTab('search');
   document.getElementById('searchGrid').innerHTML='<div class="sinfo">Type A Style And Tap Search</div>';
   document.getElementById('searchIn').value='';
   document.getElementById('urlIn').value='';
   document.getElementById('urlPreviewWrap').style.display='none';
   document.getElementById('saveIndicator').textContent='';
+  document.getElementById('saveIndicator').className='save-indicator';
 }
-function updateFaceCircle(p){
+function updateFaceCircle(m){
   const fc=document.getElementById('faceCircle');fc.innerHTML='';
-  if(p.faceImg){fc.innerHTML=`<img src="${p.faceImg}" style="width:100%;height:100%;object-fit:cover"/><div class="fc-overlay">Change Photo</div>`}
-  else{fc.innerHTML=`<div class="fc-init">${initials(p)}</div><div class="fc-overlay">Add Photo</div>`}
+  if(m.faceImg){fc.innerHTML=`<img src="${m.faceImg}" style="width:100%;height:100%;object-fit:cover"/><div class="fc-overlay">Change Photo</div>`}
+  else{fc.innerHTML=`<div class="fc-init">${initials(m)}</div><div class="fc-overlay">Add Photo</div>`}
+}
+function fieldChanged(field,value){
+  const m=partyData.members[curMember];m[field]=value;
+  if(field==='role')document.getElementById('roleDisplay').textContent=value;
+  if(field==='name'&&!m.faceImg){const fc=document.getElementById('faceCircle');const init=fc.querySelector('.fc-init');if(init)init.textContent=initials(m)}
+  setSaveIndicator('saving');scheduleSave();
 }
 function pickRadio(field,el,val){
+  const m=partyData.members[curMember];
   document.querySelectorAll('#'+field+'Chips .rchip').forEach(c=>c.classList.remove('on'));
-  if(party[cur][field]===val){party[cur][field]=''}else{el.classList.add('on');party[cur][field]=val}
-  saveToStorage();
+  if(m[field]===val){m[field]=''}else{el.classList.add('on');m[field]=val}
+  setSaveIndicator('saving');scheduleSave();
 }
 function toggleChip(el,field){
-  el.classList.toggle('on');
-  const v=el.textContent.trim();const arr=party[cur][field];
-  if(el.classList.contains('on')){if(!arr.includes(v))arr.push(v)}
-  else{const i=arr.indexOf(v);if(i>-1)arr.splice(i,1)}
-  saveToStorage();
+  const m=partyData.members[curMember];el.classList.toggle('on');
+  const v=el.textContent.trim();if(!m[field])m[field]=[];
+  if(el.classList.contains('on')){if(!m[field].includes(v))m[field].push(v)}
+  else{const idx=m[field].indexOf(v);if(idx>-1)m[field].splice(idx,1)}
+  setSaveIndicator('saving');scheduleSave();
 }
-function togglePhotoMenu(){const m=document.getElementById('photoMenu');m.style.display=m.style.display==='none'?'block':'none'}
+function togglePhotoMenu(){const mn=document.getElementById('photoMenu');mn.style.display=mn.style.display==='none'?'block':'none'}
 function doLibrary(){document.getElementById('faceLibFile').click();document.getElementById('photoMenu').style.display='none'}
 function doCamera(){document.getElementById('faceCamFile').click();document.getElementById('photoMenu').style.display='none'}
 function handleFaceFile(e){
   const f=e.target.files[0];if(!f)return;
   const r=new FileReader();
-  r.onload=ev=>{party[cur].faceImg=ev.target.result;updateFaceCircle(party[cur]);saveToStorage();if(!memberMode)renderHome()};
+  r.onload=ev=>{partyData.members[curMember].faceImg=ev.target.result;updateFaceCircle(partyData.members[curMember]);renderParty();setSaveIndicator('saving');scheduleSave()};
   r.readAsDataURL(f);e.target.value='';
 }
 function setInspoTab(t){
-  ['search','url','upload'].forEach(k=>{
-    document.getElementById('it-'+k).classList.toggle('on',k===t);
-    document.getElementById('ip-'+k).style.display=k===t?'block':'none';
-  });
+  ['search','url','upload'].forEach(k=>{document.getElementById('it-'+k).classList.toggle('on',k===t);document.getElementById('ip-'+k).style.display=k===t?'block':'none'});
 }
 const HAIR_IMAGES={
   updo:['https://images.unsplash.com/photo-1519741497674-611481863552?w=400&fit=crop','https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&fit=crop','https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&fit=crop','https://images.unsplash.com/photo-1502872364588-894d7d6ddfab?w=400&fit=crop','https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=400&fit=crop','https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&fit=crop'],
@@ -483,26 +528,25 @@ const HAIR_IMAGES={
 };
 function getImgs(q){q=(q||'').toLowerCase();for(const k of Object.keys(HAIR_IMAGES)){if(q.includes(k))return HAIR_IMAGES[k]}return Object.values(HAIR_IMAGES).flat().sort(()=>Math.random()-.5).slice(0,6)}
 function doSearch(){
-  const q=document.getElementById('searchIn').value.trim();
-  const g=document.getElementById('searchGrid');
+  const q=document.getElementById('searchIn').value.trim();const g=document.getElementById('searchGrid');
   if(!q){g.innerHTML='<div class="sinfo">Type A Keyword First</div>';return}
   g.innerHTML=`<div class="sinfo"><span class="spinner"></span>Finding Styles For "${q}"...</div>`;
   setTimeout(()=>{
-    const imgs=getImgs(q);g.innerHTML='';
+    const imgs=getImgs(q);g.innerHTML='';const m=partyData.members[curMember];
     imgs.forEach(src=>{
-      const picked=party[cur].inspoImgs.includes(src);
+      const picked=(m.inspoImgs||[]).includes(src);
       const d=document.createElement('div');d.className='sri'+(picked?' picked':'');
-      const img=document.createElement('img');img.src=src;img.alt='hair style';img.onerror=()=>d.style.display='none';
+      const img=document.createElement('img');img.src=src;img.onerror=()=>d.style.display='none';
       const ck=document.createElement('div');ck.className='sck';ck.textContent='✓';
       d.appendChild(img);d.appendChild(ck);d.onclick=()=>toggleSri(d,src);g.appendChild(d);
     });
   },400);
 }
 function toggleSri(el,src){
-  const p=party[cur];
-  if(el.classList.contains('picked')){p.inspoImgs=p.inspoImgs.filter(s=>s!==src);el.classList.remove('picked')}
-  else{if(p.inspoImgs.length>=8){showToast('Max 8 Photos');return}p.inspoImgs.push(src);el.classList.add('picked')}
-  renderInspoGrid(cur);saveToStorage();
+  const m=partyData.members[curMember];if(!m.inspoImgs)m.inspoImgs=[];
+  if(el.classList.contains('picked')){m.inspoImgs=m.inspoImgs.filter(s=>s!==src);el.classList.remove('picked')}
+  else{if(m.inspoImgs.length>=8){showToast('Max 8 Photos');return}m.inspoImgs.push(src);el.classList.add('picked')}
+  renderInspoGrid(curMember);setSaveIndicator('saving');scheduleSave();
 }
 function onUrlInput(v){
   const wrap=document.getElementById('urlPreviewWrap');const img=document.getElementById('urlPreviewImg');
@@ -512,75 +556,67 @@ function onUrlInput(v){
 function addUrl(){
   const u=document.getElementById('urlIn').value.trim();
   if(!u||!u.startsWith('http')){showToast('Please Paste A Valid Image URL');return}
-  if(party[cur].inspoImgs.length>=8){showToast('Max 8 Photos');return}
-  party[cur].inspoImgs.push(u);
-  document.getElementById('urlIn').value='';document.getElementById('urlPreviewWrap').style.display='none';
-  renderInspoGrid(cur);saveToStorage();showToast('Photo Added');
+  const m=partyData.members[curMember];if(!m.inspoImgs)m.inspoImgs=[];
+  if(m.inspoImgs.length>=8){showToast('Max 8 Photos');return}
+  m.inspoImgs.push(u);document.getElementById('urlIn').value='';document.getElementById('urlPreviewWrap').style.display='none';
+  renderInspoGrid(curMember);setSaveIndicator('saving');scheduleSave();showToast('Photo Added');
 }
 function handleInspoFile(e){
-  const files=Array.from(e.target.files);const p=party[cur];const slots=8-p.inspoImgs.length;
-  files.slice(0,slots).forEach(f=>{const r=new FileReader();r.onload=ev=>{p.inspoImgs.push(ev.target.result);renderInspoGrid(cur);saveToStorage()};r.readAsDataURL(f)});
+  const files=Array.from(e.target.files);const m=partyData.members[curMember];if(!m.inspoImgs)m.inspoImgs=[];
+  const slots=8-m.inspoImgs.length;
+  files.slice(0,slots).forEach(f=>{const r=new FileReader();r.onload=ev=>{m.inspoImgs.push(ev.target.result);renderInspoGrid(curMember);setSaveIndicator('saving');scheduleSave()};r.readAsDataURL(f)});
   e.target.value='';
 }
 function renderInspoGrid(i){
-  const p=party[i];const g=document.getElementById('inspoGrid');g.innerHTML='';
-  p.inspoImgs.forEach((s,j)=>{
+  const m=partyData.members[i];const g=document.getElementById('inspoGrid');g.innerHTML='';
+  (m.inspoImgs||[]).forEach((s,j)=>{
     const d=document.createElement('div');d.className='ig';
-    const img=document.createElement('img');img.src=s;img.alt='inspo';img.loading='lazy';img.onerror=()=>{img.style.opacity='.2'};
+    const img=document.createElement('img');img.src=s;img.loading='lazy';img.onerror=()=>{img.style.opacity='.2'};
     const btn=document.createElement('button');btn.className='igx';btn.textContent='×';
-    btn.onclick=e=>{e.stopPropagation();rmInspo(i,j)};
-    d.appendChild(img);d.appendChild(btn);g.appendChild(d);
+    btn.onclick=ev=>{ev.stopPropagation();rmInspo(i,j)};d.appendChild(img);d.appendChild(btn);g.appendChild(d);
   });
-  if(p.inspoImgs.length<8){const a=document.createElement('div');a.className='ig-add';a.textContent='+';a.onclick=()=>document.getElementById('inspoFile').click();g.appendChild(a)}
+  if((m.inspoImgs||[]).length<8){const a=document.createElement('div');a.className='ig-add';a.textContent='+';a.onclick=()=>document.getElementById('inspoFile').click();g.appendChild(a)}
 }
 function rmInspo(pi,ji){
-  const removed=party[pi].inspoImgs[ji];party[pi].inspoImgs.splice(ji,1);renderInspoGrid(pi);saveToStorage();
+  const removed=partyData.members[pi].inspoImgs[ji];partyData.members[pi].inspoImgs.splice(ji,1);
+  renderInspoGrid(pi);setSaveIndicator('saving');scheduleSave();
   document.querySelectorAll('.sri').forEach(el=>{const img=el.querySelector('img');if(img&&img.src===removed)el.classList.remove('picked')});
 }
-function saveAndBack(){saveToStorage();renderHome();goScreen('home');showToast('Profile Saved')}
-function clearAll(){localStorage.removeItem(STORAGE_KEY);localStorage.removeItem('lb_weddingdate');party=[newMember()];renderHome();showToast('Cleared — Fresh Start')}
+function weddingDateChanged(v){partyData.weddingDate=v;scheduleSave()}
 function renderLookbook(){
   const c=document.getElementById('lbContent');c.innerHTML='';
-  const any=party.some(p=>p.name||p.faceImg||p.inspoImgs.length||p.accessories.length||p.notes||p.length);
-  if(!any){c.innerHTML='<div class="empty-state">No Profiles Added Yet</div>';return}
-  party.forEach(p=>{
+  const members=partyData.members||[];
+  if(!members.length){c.innerHTML='<div class="empty-state">No Profiles Added Yet</div>';return}
+  const wdEl=document.getElementById('wdIn');if(wdEl)wdEl.value=partyData.weddingDate||'';
+  members.forEach(m=>{
     const card=document.createElement('div');card.className='lb-person';
     let inspoHtml='';
-    for(let i=0;i<4;i++){inspoHtml+=p.inspoImgs[i]?`<div class="li"><img src="${p.inspoImgs[i]}" loading="lazy"/></div>`:`<div class="li li-ph">Inspo ${i+1}</div>`}
+    for(let i=0;i<4;i++){inspoHtml+=(m.inspoImgs&&m.inspoImgs[i])?`<div class="li"><img src="${m.inspoImgs[i]}" loading="lazy"/></div>`:`<div class="li li-ph">Inspo ${i+1}</div>`}
     const specs=[];
-    if(p.length)specs.push({label:'Length',val:p.length});
-    if(p.thickness)specs.push({label:'Thickness',val:p.thickness});
-    if(p.texture)specs.push({label:'Texture',val:p.texture});
-    if(p.extensions)specs.push({label:'Extensions',val:p.extensions});
-    const specsHtml=specs.length?`<div class="lb-specs">${specs.map(s=>`<div class="lb-spec"><strong>${s.label}</strong>${s.val}</div>`).join('')}</div>`:'';
+    if(m.length)specs.push({l:'Length',v:m.length});if(m.thickness)specs.push({l:'Thickness',v:m.thickness});
+    if(m.texture)specs.push({l:'Texture',v:m.texture});if(m.extensions)specs.push({l:'Extensions',v:m.extensions});
+    const specsHtml=specs.length?`<div class="lb-specs">${specs.map(s=>`<div class="lb-spec"><strong>${s.l}</strong>${s.v}</div>`).join('')}</div>`:'';
     card.innerHTML=`<div class="lb-top">
-${p.faceImg?`<div class="lb-face"><img src="${p.faceImg}"/></div>`:`<div class="lb-face">${initials(p)}</div>`}
-<div><div style="font-size:14px;color:#1C1917;font-family:Georgia,serif;letter-spacing:.04em">${p.name||'(Unnamed)'}</div>
-<div style="font-size:9px;color:#A09A93;letter-spacing:.14em;text-transform:uppercase;margin-top:3px;font-family:Georgia,serif">${p.role||'No Role'}</div></div>
-</div>
-<div class="lb-body">
-${specsHtml}
-${p.accessories.length?`<div class="lb-tags">${p.accessories.map(t=>`<span class="lb-tag">${t}</span>`).join('')}</div>`:''}
-${p.concerns.length?`<div class="lb-tags" style="margin-top:4px">${p.concerns.map(t=>`<span class="lb-tag" style="border-style:dashed">${t}</span>`).join('')}</div>`:''}
-${p.notes?`<div class="lb-note">"${p.notes}"</div>`:''}
-<div class="lb-inspos">${inspoHtml}</div>
-</div>`;
+${m.faceImg?`<div class="lb-face"><img src="${m.faceImg}"/></div>`:`<div class="lb-face">${initials(m)}</div>`}
+<div><div style="font-size:14px;color:#1C1917;font-family:Georgia,serif;letter-spacing:.04em">${m.name||'(Unnamed)'}</div>
+<div style="font-size:9px;color:#A09A93;letter-spacing:.14em;text-transform:uppercase;margin-top:3px;font-family:Georgia,serif">${m.role||'No Role'}</div></div>
+</div><div class="lb-body">${specsHtml}
+${(m.accessories&&m.accessories.length)?`<div class="lb-tags">${m.accessories.map(t=>`<span class="lb-tag">${t}</span>`).join('')}</div>`:''}
+${(m.concerns&&m.concerns.length)?`<div class="lb-tags" style="margin-top:4px">${m.concerns.map(t=>`<span class="lb-tag" style="border-style:dashed">${t}</span>`).join('')}</div>`:''}
+${m.notes?`<div class="lb-note">"${m.notes}"</div>`:''}
+<div class="lb-inspos">${inspoHtml}</div></div>`;
     c.appendChild(card);
   });
-  document.getElementById('shareUrl').value=window.location.href.split('?')[0];
 }
 function goScreen(s){
   document.querySelectorAll('.screen').forEach(el=>el.classList.remove('on'));
   document.getElementById('s-'+s).classList.add('on');
-  if(s==='lookbook')renderLookbook();
+  if(s==='lookbook')renderLookbook();if(s==='party')renderParty();
   window.scrollTo(0,0);
 }
-function copyLink(){navigator.clipboard.writeText(window.location.href.split('?')[0]).catch(()=>{});showToast('Lookbook Link Copied')}
 function dlPdf(){showToast('Opening Print Dialog — Save As PDF');setTimeout(()=>window.print(),400)}
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
-loadFromStorage();
-renderHome();
-checkMemberMode();
+init();
 </script>
 </body>
 </html>
